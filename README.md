@@ -4,10 +4,10 @@ Rust bitflags structures with 8, 16, 32, 64, and 128-bit representation.
 ## Primary Types
 
 - `BitFlags8`: 8-bit flag that freely converts to and from `u8`.
-- `BitFlags16`: 8-bit flag that freely converts to and from `u16`.
-- `BitFlags32`: 8-bit flag that freely converts to and from `u32`.
-- `BitFlags64`: 8-bit flag that freely converts to and from `u64`.
-- `BitFlags128`: 8-bit flag that freely converts to and from `u128`.
+- `BitFlags16`: 16-bit flag that freely converts to and from `u16`.
+- `BitFlags32`: 32-bit flag that freely converts to and from `u32`.
+- `BitFlags64`: 64-bit flag that freely converts to and from `u64`.
+- `BitFlags128`: 128-bit flag that freely converts to and from `u128`.
 
 ## Goals
 
