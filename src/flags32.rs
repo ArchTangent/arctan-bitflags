@@ -1,6 +1,6 @@
 //! BitFlags with a `u32` representation.
 
-use std::convert::TryFrom;
+use core::convert::TryFrom;
 
 /// 32-bit bitflags, indexed from bit indexes `[0]` to `[31]`.
 #[derive(Debug, Default, Clone, Copy, Hash, PartialEq, Eq)]
@@ -146,7 +146,7 @@ impl BitFlags32 {
         self.0 & 2_u32.pow(index as u32) > 0
     }
     /// Returns value of bit at given index (0 is false; 1 is true).  Returns None if out
-    /// of bounds.  For cases not meant to fail, index directly with std::ops::Index.
+    /// of bounds.  For cases not meant to fail, index directly with core::ops::Index.
     #[inline]
     pub fn get_bit_at_index(&self, index: usize) -> Option<bool> {
         if index < 32 {
@@ -213,14 +213,14 @@ impl TryFrom<usize> for BitFlags32 {
     }
 }
 
-impl std::fmt::Display for BitFlags32 {
-    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+impl core::fmt::Display for BitFlags32 {
+    fn fmt(&self, f: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
         write!(f, "BitFlags32({})", self.0)
     }
 }
 
-impl std::fmt::Binary for BitFlags32 {
-    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+impl core::fmt::Binary for BitFlags32 {
+    fn fmt(&self, f: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
         write!(f, "{:#034b}", self.0)
     }
 }
@@ -247,7 +247,7 @@ pub struct BitFlagsIter32 {
     bits:        u32,
 }
 
-impl std::iter::Iterator for BitFlagsIter32 {
+impl core::iter::Iterator for BitFlagsIter32 {
     type Item = usize;
 
     fn next(&mut self) -> Option<Self::Item> {
