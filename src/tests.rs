@@ -24,6 +24,14 @@ fn bitflags8_creation() {
 }
 
 #[test]
+fn bitflags8_ops() {
+    let flags1 = BitFlags8(0b0001);
+    let flags2 = BitFlags8(0b1001);
+
+    assert_eq!(flags1 | flags2, BitFlags8(0b1001));
+}
+
+#[test]
 fn bitflags8_general() {
     let v0 = BitFlags8(0b00000000);
     let v1 = BitFlags8(0b00000100);
@@ -313,6 +321,14 @@ fn bitflags16_creation() {
     let f2a = BitFlags16::from_slice(&[2, 4, 5]);
     let f2b = BitFlags16::from_bits(0b0011_0100);
     assert_eq!(f2a, f2b);
+}
+
+#[test]
+fn bitflags16_ops() {
+    let flags1 = BitFlags16(0b0001);
+    let flags2 = BitFlags16(0b1001);
+
+    assert_eq!(flags1 | flags2, BitFlags16(0b1001));
 }
 
 #[test]
@@ -608,6 +624,14 @@ fn bitflags32_creation() {
 }
 
 #[test]
+fn bitflags32_ops() {
+    let flags1 = BitFlags32(0b0001);
+    let flags2 = BitFlags32(0b1001);
+
+    assert_eq!(flags1 | flags2, BitFlags32(0b1001));
+}
+
+#[test]
 fn bitflags32_general() {
     let v0 = BitFlags32(0b00000000);
     let v1 = BitFlags32(0b00000100);
@@ -900,6 +924,14 @@ fn bitflags64_creation() {
 }
 
 #[test]
+fn bitflags64_ops() {
+    let flags1 = BitFlags64(0b0001);
+    let flags2 = BitFlags64(0b1001);
+
+    assert_eq!(flags1 | flags2, BitFlags64(0b1001));
+}
+
+#[test]
 fn bitflags64_general() {
     let v0 = BitFlags64(0b00000000);
     let v1 = BitFlags64(0b00000100);
@@ -1189,6 +1221,14 @@ fn bitflags128_creation() {
     let f2a = BitFlags128::from_slice(&[2, 4, 5]);
     let f2b = BitFlags128::from_bits(0b0011_0100);
     assert_eq!(f2a, f2b);
+}
+
+#[test]
+fn bitflags128_ops() {
+    let flags1 = BitFlags128(0b0001);
+    let flags2 = BitFlags128(0b1001);
+
+    assert_eq!(flags1 | flags2, BitFlags128(0b1001));
 }
 
 #[test]

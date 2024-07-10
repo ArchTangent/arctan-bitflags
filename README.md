@@ -46,6 +46,14 @@ let flags = BitFlags8::from_slice(&[2, 4, 5]);
 
 ### Bit Manipulation
 
+Operations:
+```rust
+let flags1 = BitFlags8(0b1001);
+let flags2 = BitFlags8(0b0001);
+
+assert_eq!(flags1 | flags2, BitFlags8(0b1001));
+```
+
 Insertion:
 ```rust
 // Final result: `0b1101`
