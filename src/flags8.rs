@@ -85,7 +85,7 @@ impl BitFlags8 {
         assert!(index < 8, "up to 8 unique flags allowed for BitFlags8");
         self.0 = self.0 | 2_u8.pow(index as u32);
     }
-    /// Inserts or removes the specified flags depending on the passed value.
+    /// Inserts `other` if `value` is `true`; removes `other` if `value` is `false`.
     #[inline]
     pub fn set(&mut self, other: Self, value: bool) {
         if value {

@@ -85,7 +85,7 @@ impl BitFlags16 {
         assert!(index < 16, "up to 16 unique flags allowed for BitFlags16");
         self.0 = self.0 | 2_u16.pow(index as u32);
     }
-    /// Inserts or removes the specified flags depending on the passed value.
+    /// Inserts `other` if `value` is `true`; removes `other` if `value` is `false`.
     #[inline]
     pub fn set(&mut self, other: Self, value: bool) {
         if value {

@@ -85,7 +85,7 @@ impl BitFlags64 {
         assert!(index < 64, "up to 64 unique tags allowed per category for BitFlags64");
         self.0 = self.0 | 2_u64.pow(index as u32);
     }
-    /// Inserts or removes the specified flags depending on the passed value.
+    /// Inserts `other` if `value` is `true`; removes `other` if `value` is `false`.
     #[inline]
     pub fn set(&mut self, other: Self, value: bool) {
         if value {
