@@ -196,7 +196,7 @@ impl TryFrom<u32> for BitFlags8 {
         if value < 8 {
             Ok(Self(2_u8.pow(value)))
         } else {
-            Err("Only values 0-7 allowed to make a BitFlags8")
+            Err("BitFlags8 allows indexes of 0-7 only")
         }
     }
 }
@@ -208,7 +208,7 @@ impl TryFrom<usize> for BitFlags8 {
         if value < 8 {
             Ok(Self(2_u8.pow(value as u32)))
         } else {
-            Err("Only values 0-7 allowed to make a BitFlags8")
+            Err("BitFlags8 allows indexes of 0-7 only")
         }
     }
 }

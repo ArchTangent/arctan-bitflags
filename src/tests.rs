@@ -9,6 +9,17 @@ use super::*;
 //   ######             #######   ########     ##
 
 #[test]
+fn bitflags8_creation() {
+    let f1a = BitFlags8::new();
+    let f1b = BitFlags8(0);
+    let f1c = BitFlags8::from(0);
+    let f1d: BitFlags8 = 0.into();
+    assert_eq!(f1a, f1b);   
+    assert_eq!(f1b, f1c);   
+    assert_eq!(f1c, f1d);   
+}
+
+#[test]
 fn bitflags8_general() {
     // Tests is_empty(), is_all(), intersects(), contains(), from_index(),
     // bit_at_index(), and get_bit_at_index()
@@ -230,6 +241,17 @@ fn bitflags8_toggle_at_index() {
 //     ##     #######   #######   #######      ##        ##
 //     ##     ##    ##            ##    ##     ##        ##
 //   ######    ######             #######   ########     ##
+
+#[test]
+fn bitflags16_creation() {
+    let f1a = BitFlags16::new();
+    let f1b = BitFlags16(0);
+    let f1c = BitFlags16::from(0);
+    let f1d: BitFlags16 = 0.into();
+    assert_eq!(f1a, f1b);   
+    assert_eq!(f1b, f1c);   
+    assert_eq!(f1c, f1d);   
+}
 
 #[test]
 fn bitflags16_general() {
@@ -455,6 +477,17 @@ fn bitflags16_toggle_at_index() {
 //  #######   ########           #######   ########     ##
 
 #[test]
+fn bitflags32_creation() {
+    let f1a = BitFlags32::new();
+    let f1b = BitFlags32(0);
+    let f1c = BitFlags32::from(0);
+    let f1d: BitFlags32 = 0.into();
+    assert_eq!(f1a, f1b);   
+    assert_eq!(f1b, f1c);   
+    assert_eq!(f1c, f1d);   
+}
+
+#[test]
 fn bitflags32_general() {
     // Tests is_empty(), is_all(), intersects(), contains(), from_index(),
     // bit_at_index(), and get_bit_at_index()
@@ -678,6 +711,17 @@ fn bitflags32_toggle_at_index() {
 //   ######         ##            #######   ########     ##
 
 #[test]
+fn bitflags64_creation() {
+    let f1a = BitFlags64::new();
+    let f1b = BitFlags64(0);
+    let f1c = BitFlags64::from(0);
+    let f1d: BitFlags64 = 0.into();
+    assert_eq!(f1a, f1b);   
+    assert_eq!(f1b, f1c);   
+    assert_eq!(f1c, f1d);   
+}
+
+#[test]
 fn bitflags64_general() {
     // Tests is_empty(), is_all(), intersects(), contains(), from_index(),
     // bit_at_index(), and get_bit_at_index()
@@ -899,6 +943,17 @@ fn bitflags64_toggle_at_index() {
 //     ##        ####	 ######   #######  #######      ##        ##
 //     ##      ##       ##    ##           ##    ##     ##        ##
 //   ######   ########   ######            #######   ########     ##
+
+#[test]
+fn bitflags128_creation() {
+    let f1a = BitFlags128::new();
+    let f1b = BitFlags128(0);
+    let f1c = BitFlags128::from(0);
+    let f1d: BitFlags128 = 0.into();
+    assert_eq!(f1a, f1b);   
+    assert_eq!(f1b, f1c);   
+    assert_eq!(f1c, f1d);   
+}
 
 #[test]
 fn bitflags128_general() {

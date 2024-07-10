@@ -187,6 +187,13 @@ impl BitFlags128 {
     }
 }
 
+impl From<u128> for BitFlags128 {
+    fn from(value: u128) -> BitFlags128 {
+        BitFlags128(value)
+    }
+}
+
+
 impl TryFrom<u32> for BitFlags128 {
     type Error = &'static str;
 
@@ -194,7 +201,7 @@ impl TryFrom<u32> for BitFlags128 {
         if value < 128 {
             Ok(Self(2_u128.pow(value)))
         } else {
-            Err("Only values 0-127 allowed to make a BitFlags128")
+            Err("BitFlags128 allows indexes of 0-127 only")
         }             
     }
 }
@@ -206,7 +213,7 @@ impl TryFrom<usize> for BitFlags128 {
         if value < 128 {
             Ok(Self(2_u128.pow(value as u32)))
         } else {
-            Err("Only values 0-127 allowed to make a BitFlags128")
+            Err("BitFlags128 allows indexes of 0-127 only")
         }         
     }
 }

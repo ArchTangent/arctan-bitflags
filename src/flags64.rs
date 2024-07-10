@@ -199,7 +199,7 @@ impl TryFrom<u32> for BitFlags64 {
         if value < 64 {
             Ok(Self(2_u64.pow(value)))
         } else {
-            Err("Only values 0-63 allowed to make a BitFlags64")
+            Err("BitFlags64 allows indexes of 0-63 only")
         }        
     }
 }
@@ -211,7 +211,7 @@ impl TryFrom<usize> for BitFlags64 {
         if value < 64 {
             Ok(Self(2_u64.pow(value as u32)))
         } else {
-            Err("Only values 0-63 allowed to make a BitFlags64")
+            Err("BitFlags64 allows indexes of 0-63 only")
         }                
     }
 }

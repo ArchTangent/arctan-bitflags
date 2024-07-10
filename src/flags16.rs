@@ -197,7 +197,7 @@ impl TryFrom<u32> for BitFlags16 {
         if value < 16 {
             Ok(Self(2_u16.pow(value)))
         } else {
-            Err("Only values 0-15 allowed to make a BitFlags16")
+            Err("BitFlags16 allows indexes of 0-15 only")
         }
     }
 }
@@ -209,7 +209,7 @@ impl TryFrom<usize> for BitFlags16 {
         if value < 16 {
             Ok(Self(2_u16.pow(value as u32)))
         } else {
-            Err("Only values 0-15 allowed to make a BitFlags16")
+            Err("BitFlags16 allows indexes of 0-15 only")
         }
     }
 }

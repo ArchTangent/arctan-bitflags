@@ -198,7 +198,7 @@ impl TryFrom<usize> for BitFlags32 {
         if value < 32 {
             Ok(Self(2_u32.pow(value as u32)))
         } else {
-            Err("Only values 0-31 allowed to make a BitFlags32")
+            Err("BitFlags32 allows indexes of 0-31 only")
         }        
     }
 }
