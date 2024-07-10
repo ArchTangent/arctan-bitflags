@@ -233,6 +233,14 @@ impl core::ops::BitOr<BitFlags32> for BitFlags32 {
     }
 }
 
+impl core::ops::BitAnd<BitFlags32> for BitFlags32 {
+    type Output = BitFlags32;
+
+    fn bitand(self, rhs: BitFlags32) -> Self::Output {
+        BitFlags32(self.0 & rhs.0)
+    }
+}
+
 /// Iterator over set bits of a `BitFlags32`.
 pub struct BitFlagsIter32 {
     current_bit: usize,

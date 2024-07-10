@@ -29,6 +29,7 @@ fn bitflags8_ops() {
     let flags2 = BitFlags8(0b1001);
 
     assert_eq!(flags1 | flags2, BitFlags8(0b1001));
+    assert_eq!(flags1 & flags2, BitFlags8(0b0001));
 }
 
 #[test]
@@ -329,6 +330,7 @@ fn bitflags16_ops() {
     let flags2 = BitFlags16(0b1001);
 
     assert_eq!(flags1 | flags2, BitFlags16(0b1001));
+    assert_eq!(flags1 & flags2, BitFlags16(0b0001));
 }
 
 #[test]
@@ -629,6 +631,7 @@ fn bitflags32_ops() {
     let flags2 = BitFlags32(0b1001);
 
     assert_eq!(flags1 | flags2, BitFlags32(0b1001));
+    assert_eq!(flags1 & flags2, BitFlags32(0b0001));
 }
 
 #[test]
@@ -929,6 +932,7 @@ fn bitflags64_ops() {
     let flags2 = BitFlags64(0b1001);
 
     assert_eq!(flags1 | flags2, BitFlags64(0b1001));
+    assert_eq!(flags1 & flags2, BitFlags64(0b0001));
 }
 
 #[test]
@@ -1229,6 +1233,7 @@ fn bitflags128_ops() {
     let flags2 = BitFlags128(0b1001);
 
     assert_eq!(flags1 | flags2, BitFlags128(0b1001));
+    assert_eq!(flags1 & flags2, BitFlags128(0b0001));
 }
 
 #[test]
