@@ -44,6 +44,29 @@ A new instance from a slice of indexes:
 let flags = BitFlags8::from_slice(&[2, 4, 5]);
 ```
 
+### Bit Manipulation
+
+Insertion:
+```rust
+// Final result: `0b1101`
+let mut flags1 = BitFlags8(0b0001);
+let flags2 = BitFlags8(0b1001);
+flags1.insert(flags2);
+flags1.insert_at_index(2);
+```
+
+Intersection:
+```rust
+let flags1 = BitFlags8(0b1001);
+let flags2 = BitFlags8(0b0001);
+let flags3 = BitFlags8(0b1111);
+
+assert!(flags2.intersects(flags1));
+assert!(flags3.contains(flags1));
+```
+
+For more, see the documentation.
+
 ## Goals
 
 The primary purpose for creation of this library is for *games*. I wanted a bitflag type that met the following criteria:
@@ -58,10 +81,16 @@ The primary purpose for creation of this library is for *games*. I wanted a bitf
 
 5. Works with lists of external `String`s: use auxillary structs to map `String` keys to `BitFlag` values. This is useful for making custom `enum`-like objects from external data.
 
+## Credit and Inspirations
+
+I wanted something like the excellent `bitflags` crate without having to define flags in a `struct` with named fields. Many of my games and utilities use flags and enums derived from external (deserialized) lists of strings. As such, this library was born.
+
 ## To-Dos
 
 - Add `str` to `flag` conversion with `StrToFlag` types.
 
-- Update `Usage` section.
+- Add `serde` and/or `nanoserde` support.
 
-- Add `serde` support.
+- Bit manipulation functions: `difference()`, `complement()`, `union()`, `intersection()`, `toggle()`
+
+- Bit operations with `core::ops`

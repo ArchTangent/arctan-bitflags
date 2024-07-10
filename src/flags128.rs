@@ -42,7 +42,7 @@ impl BitFlags128 {
         }
 
         bits
-    }             
+    }
     /// Returns true if no flags are set.
     #[inline]
     pub fn is_empty(&self) -> bool {
@@ -52,12 +52,17 @@ impl BitFlags128 {
     #[inline]
     pub fn is_all(&self) -> bool {
         self.0 == u128::MAX
-    }     
+    }
     /// Returns true if current flags contain _at least one_ of the incoming flags.
     #[inline]
     pub fn intersects(&self, other: BitFlags128) -> bool {
         (self.0 & other.0) > 0
     }
+    /// Bitwise `AND` (`&`) of two flags.
+    #[inline]
+    pub fn intersection(&self, other: Self) -> BitFlags128 {
+        BitFlags128(self.0 & other.0)
+    }    
     /// Returns true if current flags contain _all_ incoming flags.
     #[inline]
     pub fn contains(&self, other: BitFlags128) -> bool {
@@ -74,7 +79,7 @@ impl BitFlags128 {
     pub fn insert_at_index(&mut self, index: usize) {
         assert!(index < 128, "up to 128 unique tags allowed per category for BitFlags128");
         self.0 = self.0 | 2_u128.pow(index as u32);
-    }    
+    }
     /// Inserts or removes the specified flags depending on the passed value.
     #[inline]
     pub fn set(&mut self, other: Self, value: bool) {
@@ -83,8 +88,8 @@ impl BitFlags128 {
         } else {
             self.remove(other);
         }
-    }      
-    /// Sets flag at given index to specific value (true or false; 0 or 1).  Only 128 
+    }
+    /// Sets flag at given index to specific value (true or false; 0 or 1).  Only 128
     /// indexes allowed (0-127).
     #[inline]
     pub fn set_at_index(&mut self, index: usize, value: bool) {
@@ -93,8 +98,8 @@ impl BitFlags128 {
             self.insert_at_index(index);
         } else {
             self.remove_at_index(index);
-        }        
-    }       
+        }
+    }
     /// Toggles current flags based on incoming `BitFlags128` (bitwise XOR).
     #[inline]
     pub fn toggle(&mut self, other: BitFlags128) {
@@ -105,7 +110,7 @@ impl BitFlags128 {
     pub fn toggle_at_index(&mut self, index: usize) {
         assert!(index < 128, "up to 128 unique tags allowed per category for BitFlags128");
         self.0 = self.0 ^ 2_u128.pow(index as u32);
-    }       
+    }
     /// Removes current flags that match those of incoming `BitFlags128` (bitwise AND NOT).
     #[inline]
     pub fn remove(&mut self, other: BitFlags128) {
@@ -116,7 +121,7 @@ impl BitFlags128 {
     pub fn remove_at_index(&mut self, index: usize) {
         assert!(index < 128, "up to 128 unique tags allowed per category for BitFlags128");
         self.0 = self.0 & !2_u128.pow(index as u32);
-    }         
+    }
     /// Returns the bits (internal value).
     #[inline]
     pub fn bits(&self) -> u128 {
@@ -126,36 +131,37 @@ impl BitFlags128 {
     #[inline]
     pub fn num_bits() -> usize {
         128
-    }       
-    /// Returns value of bit at given index (0 is false; 1 is true). 
-    /// Only 128 indexes allowed (0-127) - panics if out of bounds.
+    }
+    /// Returns value of bit at given index (0 is false; 1 is true).
+    ///
+    /// Indexes (0-127) allowed. Will panic if index is out of bounds.
     #[inline]
     pub fn bit_at_index(&self, index: usize) -> bool {
         assert!(index < 128, "up to 128 unique flags allowed for BitFlags16");
         self.0 & 2_u128.pow(index as u32) > 0
-    }        
+    }
     /// Returns value of bit at given index (0 is false; 1 is true).  Returns None if out
     /// of bounds.  For cases not meant to fail, index directly with std::ops::Index.
     #[inline]
     pub fn get_bit_at_index(&self, index: usize) -> Option<bool> {
         if index < 128 {
             return Some((self.0 & 2_u128.pow(index as u32)) > 0);
-        } 
+        }
         None
     }
     /// Returns the value of the highest set bit (`1`) of the bitflag.  If None -> `0`.
     #[inline]
     pub fn highest_set_bit(&self) -> u128 {
         let mut n = self.0.clone();
-        n |= n >>  1;
-        n |= n >>  2;
-        n |= n >>  4;
-        n |= n >>  8;
-        n |= n >>  16;
-        n |= n >>  32;
-        n |= n >>  64;
+        n |= n >> 1;
+        n |= n >> 2;
+        n |= n >> 4;
+        n |= n >> 8;
+        n |= n >> 16;
+        n |= n >> 32;
+        n |= n >> 64;
         n - (n >> 1)
-    }       
+    }
     /// Returns the index of the highest set bit (`1`) of the bitflag, if present
     #[inline]
     pub fn highest_set_bit_index(&self) -> Option<usize> {
@@ -169,15 +175,15 @@ impl BitFlags128 {
             bit_ix += 1;
             val >>= 1;
         }
-    
+
         Some(bit_ix)
     }
     /// Counts the number of ones in the bitflag.
     #[inline]
     pub fn count_ones(&self) -> u32 {
         self.0.count_ones()
-    }    
-    /// Iterates over set bits of the structure.  Returns `Some(bit_index)` if the 
+    }
+    /// Iterates over set bits of the structure.  Returns `Some(bit_index)` if the
     /// bit is 1, otherwise `None`.  E.g. collecting `0b00001001` into a vector would
     /// produce `vec![0, 3]`, representing the 0th and 3rd indexes.
     #[inline]
@@ -192,7 +198,6 @@ impl From<u128> for BitFlags128 {
     }
 }
 
-
 impl TryFrom<u32> for BitFlags128 {
     type Error = &'static str;
 
@@ -201,7 +206,7 @@ impl TryFrom<u32> for BitFlags128 {
             Ok(Self(2_u128.pow(value)))
         } else {
             Err("BitFlags128 allows indexes of 0-127 only")
-        }             
+        }
     }
 }
 
@@ -213,11 +218,11 @@ impl TryFrom<usize> for BitFlags128 {
             Ok(Self(2_u128.pow(value as u32)))
         } else {
             Err("BitFlags128 allows indexes of 0-127 only")
-        }         
+        }
     }
 }
 
-impl std::fmt::Display for BitFlags128{
+impl std::fmt::Display for BitFlags128 {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         write!(f, "BitFlags128({})", self.0)
     }
@@ -232,7 +237,7 @@ impl std::fmt::Binary for BitFlags128 {
 /// Iterator over set bits of a `BitFlags128`.
 pub struct BitFlagsIter128 {
     current_bit: usize,
-    bits: u128
+    bits:        u128,
 }
 
 impl std::iter::Iterator for BitFlagsIter128 {
@@ -252,4 +257,3 @@ impl std::iter::Iterator for BitFlagsIter128 {
         None
     }
 }
-

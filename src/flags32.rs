@@ -42,7 +42,7 @@ impl BitFlags32 {
         }
 
         bits
-    }            
+    }
     /// Returns true if no flags are set.
     #[inline]
     pub fn is_empty(&self) -> bool {
@@ -52,11 +52,16 @@ impl BitFlags32 {
     #[inline]
     pub fn is_all(&self) -> bool {
         self.0 == u32::MAX
-    }   
+    }
     /// Returns true if current flags contain _at least one_ of the incoming flags.
     #[inline]
     pub fn intersects(&self, other: BitFlags32) -> bool {
         (self.0 & other.0) > 0
+    }
+    /// Bitwise `AND` (`&`) of two flags.
+    #[inline]
+    pub fn intersection(&self, other: Self) -> BitFlags32 {
+        BitFlags32(self.0 & other.0)
     }
     /// Returns true if current flags contain _all_ incoming flags.
     #[inline]
@@ -74,7 +79,7 @@ impl BitFlags32 {
     pub fn insert_at_index(&mut self, index: usize) {
         assert!(index < 32, "up to 32 unique flags allowed for BitFlags32");
         self.0 = self.0 | 2_u32.pow(index as u32);
-    }    
+    }
     /// Inserts or removes the specified flags depending on the passed value.
     #[inline]
     pub fn set(&mut self, other: Self, value: bool) {
@@ -83,7 +88,7 @@ impl BitFlags32 {
         } else {
             self.remove(other);
         }
-    }     
+    }
     /// Sets flag at given index to specific value (true or false; 0 or 1).
     /// Only 32 indexes allowed (0-31).
     #[inline]
@@ -93,8 +98,8 @@ impl BitFlags32 {
             self.insert_at_index(index);
         } else {
             self.remove_at_index(index);
-        }        
-    }        
+        }
+    }
     /// Toggles current flags based on incoming `BitFlags32` (bitwise XOR).
     #[inline]
     pub fn toggle(&mut self, other: BitFlags32) {
@@ -105,7 +110,7 @@ impl BitFlags32 {
     pub fn toggle_at_index(&mut self, index: usize) {
         assert!(index < 32, "up to 32 unique flags allowed for BitFlags32");
         self.0 = self.0 ^ 2_u32.pow(index as u32);
-    }       
+    }
     /// Removes current flags that match those of incoming `BitFlags32` (bitwise AND NOT).
     #[inline]
     pub fn remove(&mut self, other: BitFlags32) {
@@ -116,7 +121,7 @@ impl BitFlags32 {
     pub fn remove_at_index(&mut self, index: usize) {
         assert!(index < 32, "up to 32 unique flags allowed for BitFlags32");
         self.0 = self.0 & !2_u32.pow(index as u32);
-    }         
+    }
     /// Returns the bits (internal value).
     #[inline]
     pub fn bits(&self) -> u32 {
@@ -126,34 +131,35 @@ impl BitFlags32 {
     #[inline]
     pub fn num_bits() -> usize {
         32
-    }       
-    /// Returns value of bit at given index (0 is false; 1 is true). 
-    /// Only 32 indexes allowed (0-31) - panics if out of bounds.
+    }
+    /// Returns value of bit at given index (0 is false; 1 is true).
+    ///
+    /// Indexes (0-31) allowed. Will panic if index is out of bounds.
     #[inline]
     pub fn bit_at_index(&self, index: usize) -> bool {
         assert!(index < 32, "up to 32 unique flags allowed for BitFlags16");
         self.0 & 2_u32.pow(index as u32) > 0
-    }        
+    }
     /// Returns value of bit at given index (0 is false; 1 is true).  Returns None if out
     /// of bounds.  For cases not meant to fail, index directly with std::ops::Index.
     #[inline]
     pub fn get_bit_at_index(&self, index: usize) -> Option<bool> {
         if index < 32 {
             return Some((self.0 & 2_u32.pow(index as u32)) > 0);
-        } 
+        }
         None
     }
     /// Returns the value of the highest set bit (`1`) of the bitflag.  If None -> `0`.
     #[inline]
     pub fn highest_set_bit(&self) -> u32 {
         let mut n = self.0.clone();
-        n |= n >>  1;
-        n |= n >>  2;
-        n |= n >>  4;
-        n |= n >>  8;
-        n |= n >>  16;
+        n |= n >> 1;
+        n |= n >> 2;
+        n |= n >> 4;
+        n |= n >> 8;
+        n |= n >> 16;
         n - (n >> 1)
-    }    
+    }
     /// Returns the index of the highest set bit (`1`) of the bitflag, if present
     #[inline]
     pub fn highest_set_bit_index(&self) -> Option<usize> {
@@ -167,15 +173,15 @@ impl BitFlags32 {
             bit_ix += 1;
             val >>= 1;
         }
-    
+
         Some(bit_ix)
-    }   
+    }
     /// Counts the number of ones in the bitflag.
     #[inline]
     pub fn count_ones(&self) -> u32 {
         self.0.count_ones()
-    }    
-    /// Iterates over set bits of the structure.  Returns `Some(bit_index)` if the 
+    }
+    /// Iterates over set bits of the structure.  Returns `Some(bit_index)` if the
     /// bit is 1, otherwise `None`.  E.g. collecting `0b00001001` into a vector would
     /// produce `vec![0, 3]`, representing the 0th and 3rd indexes.
     #[inline]
@@ -198,11 +204,11 @@ impl TryFrom<usize> for BitFlags32 {
             Ok(Self(2_u32.pow(value as u32)))
         } else {
             Err("BitFlags32 allows indexes of 0-31 only")
-        }        
+        }
     }
 }
 
-impl std::fmt::Display for BitFlags32{
+impl std::fmt::Display for BitFlags32 {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         write!(f, "BitFlags32({})", self.0)
     }
@@ -217,7 +223,7 @@ impl std::fmt::Binary for BitFlags32 {
 /// Iterator over set bits of a `BitFlags32`.
 pub struct BitFlagsIter32 {
     current_bit: usize,
-    bits: u32
+    bits:        u32,
 }
 
 impl std::iter::Iterator for BitFlagsIter32 {

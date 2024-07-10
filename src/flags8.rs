@@ -26,7 +26,7 @@ impl BitFlags8 {
     pub fn from_bits(val: u8) -> Self {
         Self(val)
     }
-    /// Converts an index into a BitFlag. 8 indexes allowed (0-7). 
+    /// Converts an index into a BitFlag. 8 indexes allowed (0-7).
     #[inline]
     pub fn from_index(index: usize) -> Self {
         Self::try_from(index).unwrap()
@@ -57,6 +57,11 @@ impl BitFlags8 {
     #[inline]
     pub fn intersects(&self, other: Self) -> bool {
         (self.0 & other.0) > 0
+    }
+    /// Bitwise `AND` (`&`) of two flags.
+    #[inline]
+    pub fn intersection(&self, other: Self) -> BitFlags8 {
+        BitFlags8(self.0 & other.0)
     }
     /// Returns true if current flags contain _all_ incoming flags.
     #[inline]
@@ -128,7 +133,8 @@ impl BitFlags8 {
         8
     }
     /// Returns value of bit at given index (0 is false; 1 is true).
-    /// Only 8 indexes allowed (0-7) - panics if out of bounds.
+    ///
+    /// Indexes (0-7) allowed. Will panic if index is out of bounds.
     #[inline]
     pub fn bit_at_index(&self, index: usize) -> bool {
         assert!(index < 8, "up to 8 unique flags allowed for BitFlags8");

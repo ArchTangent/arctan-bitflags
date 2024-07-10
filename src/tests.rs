@@ -47,6 +47,17 @@ fn bitflags8_general() {
 }
 
 #[test]
+fn bitflags8_intersection() {
+    let f1 = BitFlags8(0b0000);
+    let f2 = BitFlags8(0b0001);
+    let f3 = BitFlags8(0b1001);
+
+    assert_eq!(f1.intersection(f2), BitFlags8(0b0000));
+    assert_eq!(f1.intersection(f3), BitFlags8(0b0000));
+    assert_eq!(f2.intersection(f3), BitFlags8(0b0001));
+}
+
+#[test]
 fn bitflags8_highest_set_bit() {
     let values = &[
         BitFlags8(0),
@@ -255,7 +266,7 @@ fn bitflags16_creation() {
     assert_eq!(f1a, f1b);
     assert_eq!(f1b, f1c);
     assert_eq!(f1c, f1d);
-    
+
     let f2a = BitFlags16::from_slice(&[2, 4, 5]);
     let f2b = BitFlags16::from_bits(0b0011_0100);
     assert_eq!(f2a, f2b);
@@ -282,6 +293,17 @@ fn bitflags16_general() {
     assert_eq!(v1.get_bit_at_index(2), Some(true));
     assert_eq!(v1.get_bit_at_index(3), Some(false));
     assert_eq!(v1.get_bit_at_index(16), None);
+}
+
+#[test]
+fn bitflags16_intersection() {
+    let f1 = BitFlags16(0b0000);
+    let f2 = BitFlags16(0b0001);
+    let f3 = BitFlags16(0b1001);
+
+    assert_eq!(f1.intersection(f2), BitFlags16(0b0000));
+    assert_eq!(f1.intersection(f3), BitFlags16(0b0000));
+    assert_eq!(f2.intersection(f3), BitFlags16(0b0001));
 }
 
 #[test]
@@ -493,7 +515,7 @@ fn bitflags32_creation() {
     assert_eq!(f1a, f1b);
     assert_eq!(f1b, f1c);
     assert_eq!(f1c, f1d);
-    
+
     let f2a = BitFlags32::from_slice(&[2, 4, 5]);
     let f2b = BitFlags32::from_bits(0b0011_0100);
     assert_eq!(f2a, f2b);
@@ -520,6 +542,17 @@ fn bitflags32_general() {
     assert_eq!(v1.get_bit_at_index(2), Some(true));
     assert_eq!(v1.get_bit_at_index(3), Some(false));
     assert_eq!(v1.get_bit_at_index(32), None);
+}
+
+#[test]
+fn bitflags32_intersection() {
+    let f1 = BitFlags32(0b0000);
+    let f2 = BitFlags32(0b0001);
+    let f3 = BitFlags32(0b1001);
+
+    assert_eq!(f1.intersection(f2), BitFlags32(0b0000));
+    assert_eq!(f1.intersection(f3), BitFlags32(0b0000));
+    assert_eq!(f2.intersection(f3), BitFlags32(0b0001));
 }
 
 #[test]
@@ -731,7 +764,7 @@ fn bitflags64_creation() {
     assert_eq!(f1a, f1b);
     assert_eq!(f1b, f1c);
     assert_eq!(f1c, f1d);
-    
+
     let f2a = BitFlags64::from_slice(&[2, 4, 5]);
     let f2b = BitFlags64::from_bits(0b0011_0100);
     assert_eq!(f2a, f2b);
@@ -758,6 +791,17 @@ fn bitflags64_general() {
     assert_eq!(v1.get_bit_at_index(2), Some(true));
     assert_eq!(v1.get_bit_at_index(3), Some(false));
     assert_eq!(v1.get_bit_at_index(64), None);
+}
+
+#[test]
+fn bitflags64_intersection() {
+    let f1 = BitFlags64(0b0000);
+    let f2 = BitFlags64(0b0001);
+    let f3 = BitFlags64(0b1001);
+
+    assert_eq!(f1.intersection(f2), BitFlags64(0b0000));
+    assert_eq!(f1.intersection(f3), BitFlags64(0b0000));
+    assert_eq!(f2.intersection(f3), BitFlags64(0b0001));
 }
 
 #[test]
@@ -969,7 +1013,7 @@ fn bitflags128_creation() {
     assert_eq!(f1a, f1b);
     assert_eq!(f1b, f1c);
     assert_eq!(f1c, f1d);
-    
+
     let f2a = BitFlags128::from_slice(&[2, 4, 5]);
     let f2b = BitFlags128::from_bits(0b0011_0100);
     assert_eq!(f2a, f2b);
@@ -996,6 +1040,17 @@ fn bitflags128_general() {
     assert_eq!(v1.get_bit_at_index(2), Some(true));
     assert_eq!(v1.get_bit_at_index(3), Some(false));
     assert_eq!(v1.get_bit_at_index(128), None);
+}
+
+#[test]
+fn bitflags128_intersection() {
+    let f1 = BitFlags128(0b0000);
+    let f2 = BitFlags128(0b0001);
+    let f3 = BitFlags128(0b1001);
+
+    assert_eq!(f1.intersection(f2), BitFlags128(0b0000));
+    assert_eq!(f1.intersection(f3), BitFlags128(0b0000));
+    assert_eq!(f2.intersection(f3), BitFlags128(0b0001));
 }
 
 #[test]

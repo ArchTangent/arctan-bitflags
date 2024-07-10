@@ -58,6 +58,11 @@ impl BitFlags16 {
     pub fn intersects(&self, other: Self) -> bool {
         (self.0 & other.0) > 0
     }
+    /// Bitwise `AND` (`&`) of two flags.
+    #[inline]
+    pub fn intersection(&self, other: Self) -> BitFlags16 {
+        BitFlags16(self.0 & other.0)
+    }
     /// Returns true if current flags contain _all_ incoming flags.
     #[inline]
     pub fn contains(&self, other: Self) -> bool {
@@ -128,7 +133,8 @@ impl BitFlags16 {
         16
     }
     /// Returns value of bit at given index (0 is false; 1 is true).
-    /// Only 16 indexes allowed (0-15) - panics if out of bounds.
+    ///
+    /// Indexes (0-15) allowed. Will panic if index is out of bounds.
     #[inline]
     pub fn bit_at_index(&self, index: usize) -> bool {
         assert!(index < 16, "up to 16 unique flags allowed for BitFlags16");
