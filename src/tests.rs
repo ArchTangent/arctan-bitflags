@@ -14,9 +14,13 @@ fn bitflags8_creation() {
     let f1b = BitFlags8(0);
     let f1c = BitFlags8::from(0);
     let f1d: BitFlags8 = 0.into();
-    assert_eq!(f1a, f1b);   
-    assert_eq!(f1b, f1c);   
-    assert_eq!(f1c, f1d);   
+    assert_eq!(f1a, f1b);
+    assert_eq!(f1b, f1c);
+    assert_eq!(f1c, f1d);
+
+    let f2a = BitFlags8::from_slice(&[2, 4, 5]);
+    let f2b = BitFlags8::from_bits(0b0011_0100);
+    assert_eq!(f2a, f2b);
 }
 
 #[test]
@@ -248,9 +252,13 @@ fn bitflags16_creation() {
     let f1b = BitFlags16(0);
     let f1c = BitFlags16::from(0);
     let f1d: BitFlags16 = 0.into();
-    assert_eq!(f1a, f1b);   
-    assert_eq!(f1b, f1c);   
-    assert_eq!(f1c, f1d);   
+    assert_eq!(f1a, f1b);
+    assert_eq!(f1b, f1c);
+    assert_eq!(f1c, f1d);
+    
+    let f2a = BitFlags16::from_slice(&[2, 4, 5]);
+    let f2b = BitFlags16::from_bits(0b0011_0100);
+    assert_eq!(f2a, f2b);
 }
 
 #[test]
@@ -482,9 +490,13 @@ fn bitflags32_creation() {
     let f1b = BitFlags32(0);
     let f1c = BitFlags32::from(0);
     let f1d: BitFlags32 = 0.into();
-    assert_eq!(f1a, f1b);   
-    assert_eq!(f1b, f1c);   
-    assert_eq!(f1c, f1d);   
+    assert_eq!(f1a, f1b);
+    assert_eq!(f1b, f1c);
+    assert_eq!(f1c, f1d);
+    
+    let f2a = BitFlags32::from_slice(&[2, 4, 5]);
+    let f2b = BitFlags32::from_bits(0b0011_0100);
+    assert_eq!(f2a, f2b);
 }
 
 #[test]
@@ -716,9 +728,13 @@ fn bitflags64_creation() {
     let f1b = BitFlags64(0);
     let f1c = BitFlags64::from(0);
     let f1d: BitFlags64 = 0.into();
-    assert_eq!(f1a, f1b);   
-    assert_eq!(f1b, f1c);   
-    assert_eq!(f1c, f1d);   
+    assert_eq!(f1a, f1b);
+    assert_eq!(f1b, f1c);
+    assert_eq!(f1c, f1d);
+    
+    let f2a = BitFlags64::from_slice(&[2, 4, 5]);
+    let f2b = BitFlags64::from_bits(0b0011_0100);
+    assert_eq!(f2a, f2b);
 }
 
 #[test]
@@ -950,9 +966,13 @@ fn bitflags128_creation() {
     let f1b = BitFlags128(0);
     let f1c = BitFlags128::from(0);
     let f1d: BitFlags128 = 0.into();
-    assert_eq!(f1a, f1b);   
-    assert_eq!(f1b, f1c);   
-    assert_eq!(f1c, f1d);   
+    assert_eq!(f1a, f1b);
+    assert_eq!(f1b, f1c);
+    assert_eq!(f1c, f1d);
+    
+    let f2a = BitFlags128::from_slice(&[2, 4, 5]);
+    let f2b = BitFlags128::from_bits(0b0011_0100);
+    assert_eq!(f2a, f2b);
 }
 
 #[test]

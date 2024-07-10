@@ -25,6 +25,8 @@ let flags = BitFlags8::all();
 
 A new instance from corresponding integer (all three are identical):
 ```rust
+let flags = BitFlags8(0b0110);
+
 let flags = BitFlags8::from_bits(0b0110);
 
 let flags = BitFlags8::from(6u8);
@@ -57,10 +59,6 @@ The primary purpose for creation of this library is for *games*. I wanted a bitf
 5. Works with lists of external `String`s: use auxillary structs to map `String` keys to `BitFlag` values. This is useful for making custom `enum`-like objects from external data.
 
 ## To-Dos
-
-- Improved documentation to show usage.
-
-- add all `BitFlag` types.
 
 - Add `str` to `flag` conversion with `StrToFlag` types.
 
