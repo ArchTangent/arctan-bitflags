@@ -26,8 +26,7 @@ impl BitFlags8 {
     pub fn from_bits(val: u8) -> Self {
         Self(val)
     }
-    /// Converts an index into a BitFlag. 8 indexes allowed (0-7). `usize` conversion
-    /// to `u32` is fine as no bitflag struct has more than `u32::MAX` bits.
+    /// Converts an index into a BitFlag. 8 indexes allowed (0-7). 
     #[inline]
     pub fn from_index(index: usize) -> Self {
         Self::try_from(index).unwrap()

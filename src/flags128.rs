@@ -26,13 +26,12 @@ impl BitFlags128 {
     pub fn from_bits(val: u128) -> Self {
         Self(val)
     }
-    /// Converts an index into a BitFlag. 128 indexes allowed (0-127). `usize` conversion 
-    /// to `u32` is fine as no bitflag struct has more than `u32::MAX` bits.
+    /// Converts an index into a BitFlag. 128 indexes allowed (0-127).
     #[inline]
     pub fn from_index(index: usize) -> Self {
         Self::try_from(index).unwrap()
     }
-    /// Converts a slice of indexes into a BitFlag. 64 indexes allowed (0-63).
+    /// Converts a slice of indexes into a BitFlag. 128 indexes allowed (0-127).
     #[inline]
     pub fn from_slice(s: &[usize]) -> Self {
         let mut bits = Self(0);
