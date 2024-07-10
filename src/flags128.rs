@@ -255,6 +255,14 @@ impl core::ops::BitAnd<BitFlags128> for BitFlags128 {
     }
 }
 
+impl core::ops::BitXor<BitFlags128> for BitFlags128 {
+    type Output = BitFlags128;
+
+    fn bitxor(self, rhs: BitFlags128) -> Self::Output {
+        BitFlags128(self.0 ^ rhs.0)
+    }
+}
+
 /// Iterator over set bits of a `BitFlags128`.
 pub struct BitFlagsIter128 {
     current_bit: usize,
