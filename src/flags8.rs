@@ -63,6 +63,11 @@ impl BitFlags8 {
     pub fn intersection(&self, other: Self) -> BitFlags8 {
         BitFlags8(self.0 & other.0)
     }
+    /// Bitwise `OR` (`|`) of two flags.
+    #[inline]
+    pub fn union(&self, other: Self) -> BitFlags8 {
+        BitFlags8(self.0 | other.0)
+    }
     /// Returns true if current flags contain _all_ incoming flags.
     #[inline]
     pub fn contains(&self, other: Self) -> bool {

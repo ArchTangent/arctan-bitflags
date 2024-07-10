@@ -63,6 +63,11 @@ impl BitFlags16 {
     pub fn intersection(&self, other: Self) -> BitFlags16 {
         BitFlags16(self.0 & other.0)
     }
+    /// Bitwise `OR` (`|`) of two flags.
+    #[inline]
+    pub fn union(&self, other: Self) -> BitFlags16 {
+        BitFlags16(self.0 | other.0)
+    }    
     /// Returns true if current flags contain _all_ incoming flags.
     #[inline]
     pub fn contains(&self, other: Self) -> bool {

@@ -63,6 +63,15 @@ let flags3 = BitFlags8(0b1111);
 
 assert!(flags2.intersects(flags1));
 assert!(flags3.contains(flags1));
+assert_eq!(flags1.intersection(flags2), BitFlags8(0b0001));
+```
+
+Union:
+```rust
+let flags1 = BitFlags8(0b1001);
+let flags2 = BitFlags8(0b0001);
+
+assert_eq!(flags1.union(flags2), BitFlags8(0b1001));
 ```
 
 For more, see the documentation.
