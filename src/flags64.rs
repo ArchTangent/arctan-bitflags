@@ -67,7 +67,12 @@ impl BitFlags64 {
     #[inline]
     pub fn difference(&self, other: Self) -> BitFlags64 {
         BitFlags64(self.0 & !other.0)
-    }        
+    }
+    /// Returns the bits set in `self` or `other`, but *not* both, using bitwise `XOR` (`^`).
+    #[inline]
+    pub fn symmetric_difference(&self, other: Self) -> BitFlags64 {
+        BitFlags64(self.0 ^ other.0)
+    }
     /// Bitwise `OR` (`|`) of two flags.
     #[inline]
     pub fn union(&self, other: Self) -> BitFlags64 {

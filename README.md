@@ -111,6 +111,4 @@ I wanted something like the excellent `bitflags` crate without having to define 
 
 - Add `serde` and/or `nanoserde` support.
 
-- Bit manipulation functions: `difference()`, `complement()`, `union()`, `intersection()`, `toggle()`
-
-- Bit operations with `core::ops`
+- Examples in doc comments.
