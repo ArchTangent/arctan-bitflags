@@ -28,19 +28,40 @@ fn bitflags8_ops() {
     let flags1 = BitFlags8(0b0001);
     let flags2 = BitFlags8(0b0010);
     let flags3 = BitFlags8(0b1001);
-
+    
     assert_eq!(flags1 | flags2, BitFlags8(0b0011));
     assert_eq!(flags1 | flags3, BitFlags8(0b1001));
-
+    
     assert_eq!(flags1 & flags2, BitFlags8(0b0000));
     assert_eq!(flags1 & flags3, BitFlags8(0b0001));
-
+    
     assert_eq!(flags1 ^ flags2, BitFlags8(0b0011));
     assert_eq!(flags1 ^ flags3, BitFlags8(0b1000));
-
+    
     assert_eq!(!flags1, BitFlags8(0b1111_1110));
     assert_eq!(!flags2, BitFlags8(0b1111_1101));
     assert_eq!(!flags3, BitFlags8(0b1111_0110));
+}
+
+#[test]
+fn bitflags8_ops_assign() {
+    let mut flags1 = BitFlags8(0b0001);
+    let flags2 = BitFlags8(0b0010);
+    let flags3 = BitFlags8(0b1001);
+
+    flags1 |= flags2;
+    assert_eq!(flags1, BitFlags8(0b0011));
+    
+    flags1 |= flags3;
+    assert_eq!(flags1, BitFlags8(0b1011));
+    
+    // let mut flags1 = BitFlags8(0b0001);
+
+    // flags1 &= flags2;
+    // assert_eq!(flags1, BitFlags8(0b0000));
+
+    // flags1 &= flags3;
+    // assert_eq!(flags1, BitFlags8(0b0000));
 }
 
 #[test]
@@ -356,6 +377,27 @@ fn bitflags16_ops() {
 }
 
 #[test]
+fn bitflags16_ops_assign() {
+    let mut flags1 = BitFlags16(0b0001);
+    let flags2 = BitFlags16(0b0010);
+    let flags3 = BitFlags16(0b1001);
+
+    flags1 |= flags2;
+    assert_eq!(flags1, BitFlags16(0b0011));
+    
+    flags1 |= flags3;
+    assert_eq!(flags1, BitFlags16(0b1011));
+    
+    // let mut flags1 = BitFlags16(0b0001);
+
+    // flags1 &= flags2;
+    // assert_eq!(flags1, BitFlags16(0b0000));
+
+    // flags1 &= flags3;
+    // assert_eq!(flags1, BitFlags16(0b0000));
+}
+
+#[test]
 fn bitflags16_general() {
     let v0 = BitFlags16(0b00000000);
     let v1 = BitFlags16(0b00000100);
@@ -665,6 +707,27 @@ fn bitflags32_ops() {
     assert_eq!(!flags1, BitFlags32(0b11111111_11111111_11111111_1111_1110));
     assert_eq!(!flags2, BitFlags32(0b11111111_11111111_11111111_1111_1101));
     assert_eq!(!flags3, BitFlags32(0b11111111_11111111_11111111_1111_0110));
+}
+
+#[test]
+fn bitflags32_ops_assign() {
+    let mut flags1 = BitFlags32(0b0001);
+    let flags2 = BitFlags32(0b0010);
+    let flags3 = BitFlags32(0b1001);
+
+    flags1 |= flags2;
+    assert_eq!(flags1, BitFlags32(0b0011));
+    
+    flags1 |= flags3;
+    assert_eq!(flags1, BitFlags32(0b1011));
+    
+    // let mut flags1 = BitFlags32(0b0001);
+
+    // flags1 &= flags2;
+    // assert_eq!(flags1, BitFlags32(0b0000));
+
+    // flags1 &= flags3;
+    // assert_eq!(flags1, BitFlags32(0b0000));
 }
 
 #[test]
@@ -980,6 +1043,27 @@ fn bitflags64_ops() {
 }
 
 #[test]
+fn bitflags64_ops_assign() {
+    let mut flags1 = BitFlags64(0b0001);
+    let flags2 = BitFlags64(0b0010);
+    let flags3 = BitFlags64(0b1001);
+
+    flags1 |= flags2;
+    assert_eq!(flags1, BitFlags64(0b0011));
+    
+    flags1 |= flags3;
+    assert_eq!(flags1, BitFlags64(0b1011));
+    
+    // let mut flags1 = BitFlags64(0b0001);
+
+    // flags1 &= flags2;
+    // assert_eq!(flags1, BitFlags64(0b0000));
+
+    // flags1 &= flags3;
+    // assert_eq!(flags1, BitFlags64(0b0000));
+}
+
+#[test]
 fn bitflags64_general() {
     let v0 = BitFlags64(0b00000000);
     let v1 = BitFlags64(0b00000100);
@@ -1289,6 +1373,27 @@ fn bitflags128_ops() {
     assert_eq!(!flags1, BitFlags128(0b11111111_11111111_11111111_11111111_11111111_11111111_11111111_11111111_11111111_11111111_11111111_11111111_11111111_11111111_11111111_1111_1110));
     assert_eq!(!flags2, BitFlags128(0b11111111_11111111_11111111_11111111_11111111_11111111_11111111_11111111_11111111_11111111_11111111_11111111_11111111_11111111_11111111_1111_1101));
     assert_eq!(!flags3, BitFlags128(0b11111111_11111111_11111111_11111111_11111111_11111111_11111111_11111111_11111111_11111111_11111111_11111111_11111111_11111111_11111111_1111_0110));
+}
+
+#[test]
+fn bitflags128_ops_assign() {
+    let mut flags1 = BitFlags128(0b0001);
+    let flags2 = BitFlags128(0b0010);
+    let flags3 = BitFlags128(0b1001);
+
+    flags1 |= flags2;
+    assert_eq!(flags1, BitFlags128(0b0011));
+    
+    flags1 |= flags3;
+    assert_eq!(flags1, BitFlags128(0b1011));
+    
+    // let mut flags1 = BitFlags128(0b0001);
+
+    // flags1 &= flags2;
+    // assert_eq!(flags1, BitFlags128(0b0000));
+
+    // flags1 &= flags3;
+    // assert_eq!(flags1, BitFlags128(0b0000));
 }
 
 #[test]

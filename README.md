@@ -51,7 +51,10 @@ Operations:
 let flags1 = BitFlags8(0b1001);
 let flags2 = BitFlags8(0b0001);
 
-assert_eq!(flags1 | flags2, BitFlags8(0b1001));
+assert_eq!(flags1 | flags2, BitFlags8(0b1001)); // BitOr
+assert_eq!(flags1 & flags2, BitFlags8(0b0000)); // BitAnd
+assert_eq!(flags1 ^ flags2, BitFlags8(0b0011)); // BitXor
+assert_eq!(!flags1, BitFlags8(0b1111_1110)); // Not
 ```
 
 Insertion:

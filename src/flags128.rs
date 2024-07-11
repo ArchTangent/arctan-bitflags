@@ -247,6 +247,12 @@ impl core::ops::BitOr<BitFlags128> for BitFlags128 {
     }
 }
 
+impl core::ops::BitOrAssign<BitFlags128> for BitFlags128 {
+    fn bitor_assign(&mut self, rhs: BitFlags128) {
+        self.0 |= rhs.0
+    }
+}
+
 impl core::ops::BitAnd<BitFlags128> for BitFlags128 {
     type Output = BitFlags128;
 
@@ -266,6 +272,7 @@ impl core::ops::BitXor<BitFlags128> for BitFlags128 {
 impl core::ops::Not for BitFlags128 {
     type Output = BitFlags128;
 
+    /// Toggles *all* bits.
     fn not(self) -> Self::Output {
         BitFlags128(!self.0)
     }

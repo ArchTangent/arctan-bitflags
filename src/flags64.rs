@@ -67,7 +67,7 @@ impl BitFlags64 {
     #[inline]
     pub fn union(&self, other: Self) -> BitFlags64 {
         BitFlags64(self.0 | other.0)
-    }        
+    }
     /// Returns true if current flags contain _all_ incoming flags.
     #[inline]
     pub fn contains(&self, other: BitFlags64) -> bool {
@@ -246,6 +246,12 @@ impl core::ops::BitOr<BitFlags64> for BitFlags64 {
     }
 }
 
+impl core::ops::BitOrAssign<BitFlags64> for BitFlags64 {
+    fn bitor_assign(&mut self, rhs: BitFlags64) {
+        self.0 |= rhs.0
+    }
+}
+
 impl core::ops::BitAnd<BitFlags64> for BitFlags64 {
     type Output = BitFlags64;
 
@@ -265,6 +271,7 @@ impl core::ops::BitXor<BitFlags64> for BitFlags64 {
 impl core::ops::Not for BitFlags64 {
     type Output = BitFlags64;
 
+    /// Toggles *all* bits.
     fn not(self) -> Self::Output {
         BitFlags64(!self.0)
     }

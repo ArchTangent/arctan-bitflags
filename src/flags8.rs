@@ -243,6 +243,12 @@ impl core::ops::BitOr<BitFlags8> for BitFlags8 {
     }
 }
 
+impl core::ops::BitOrAssign<BitFlags8> for BitFlags8 {
+    fn bitor_assign(&mut self, rhs: BitFlags8) {
+        self.0 |= rhs.0
+    }
+}
+
 impl core::ops::BitAnd<BitFlags8> for BitFlags8 {
     type Output = BitFlags8;
 
@@ -262,6 +268,7 @@ impl core::ops::BitXor<BitFlags8> for BitFlags8 {
 impl core::ops::Not for BitFlags8 {
     type Output = BitFlags8;
 
+    /// Toggles *all* bits.
     fn not(self) -> Self::Output {
         BitFlags8(!self.0)
     }
