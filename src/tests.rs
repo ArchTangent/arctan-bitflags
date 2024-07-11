@@ -108,6 +108,20 @@ fn bitflags8_intersection() {
 }
 
 #[test]
+fn bitflags8_difference() {
+    let f1 = BitFlags8(0b0000);
+    let f2 = BitFlags8(0b0001);
+    let f3 = BitFlags8(0b1001);
+
+    assert_eq!(f1.difference(f2), BitFlags8(0b0000));
+    assert_eq!(f1.difference(f3), BitFlags8(0b0000));
+    assert_eq!(f2.difference(f3), BitFlags8(0b0000));
+    assert_eq!(f3.difference(f2), BitFlags8(0b1000));
+    assert_eq!(f3.difference(f1), BitFlags8(0b1001));
+    assert_eq!(f2.difference(f1), BitFlags8(0b0001));
+}
+
+#[test]
 fn bitflags8_union() {
     let f1 = BitFlags8(0b0000);
     let f2 = BitFlags8(0b0001);
@@ -468,6 +482,20 @@ fn bitflags16_intersection() {
 }
 
 #[test]
+fn bitflags16_difference() {
+    let f1 = BitFlags16(0b0000);
+    let f2 = BitFlags16(0b0001);
+    let f3 = BitFlags16(0b1001);
+
+    assert_eq!(f1.difference(f2), BitFlags16(0b0000));
+    assert_eq!(f1.difference(f3), BitFlags16(0b0000));
+    assert_eq!(f2.difference(f3), BitFlags16(0b0000));
+    assert_eq!(f3.difference(f2), BitFlags16(0b1000));
+    assert_eq!(f3.difference(f1), BitFlags16(0b1001));
+    assert_eq!(f2.difference(f1), BitFlags16(0b0001));
+}
+
+#[test]
 fn bitflags16_union() {
     let f1 = BitFlags16(0b0000);
     let f2 = BitFlags16(0b0001);
@@ -825,6 +853,20 @@ fn bitflags32_intersection() {
     assert_eq!(f1.intersection(f2), BitFlags32(0b0000));
     assert_eq!(f1.intersection(f3), BitFlags32(0b0000));
     assert_eq!(f2.intersection(f3), BitFlags32(0b0001));
+}
+
+#[test]
+fn bitflags32_difference() {
+    let f1 = BitFlags32(0b0000);
+    let f2 = BitFlags32(0b0001);
+    let f3 = BitFlags32(0b1001);
+
+    assert_eq!(f1.difference(f2), BitFlags32(0b0000));
+    assert_eq!(f1.difference(f3), BitFlags32(0b0000));
+    assert_eq!(f2.difference(f3), BitFlags32(0b0000));
+    assert_eq!(f3.difference(f2), BitFlags32(0b1000));
+    assert_eq!(f3.difference(f1), BitFlags32(0b1001));
+    assert_eq!(f2.difference(f1), BitFlags32(0b0001));
 }
 
 #[test]
@@ -1206,6 +1248,20 @@ fn bitflags64_intersection() {
 }
 
 #[test]
+fn bitflags64_difference() {
+    let f1 = BitFlags64(0b0000);
+    let f2 = BitFlags64(0b0001);
+    let f3 = BitFlags64(0b1001);
+
+    assert_eq!(f1.difference(f2), BitFlags64(0b0000));
+    assert_eq!(f1.difference(f3), BitFlags64(0b0000));
+    assert_eq!(f2.difference(f3), BitFlags64(0b0000));
+    assert_eq!(f3.difference(f2), BitFlags64(0b1000));
+    assert_eq!(f3.difference(f1), BitFlags64(0b1001));
+    assert_eq!(f2.difference(f1), BitFlags64(0b0001));
+}
+
+#[test]
 fn bitflags64_union() {
     let f1 = BitFlags64(0b0000);
     let f2 = BitFlags64(0b0001);
@@ -1563,6 +1619,20 @@ fn bitflags128_intersection() {
     assert_eq!(f1.intersection(f2), BitFlags128(0b0000));
     assert_eq!(f1.intersection(f3), BitFlags128(0b0000));
     assert_eq!(f2.intersection(f3), BitFlags128(0b0001));
+}
+
+#[test]
+fn bitflags128_difference() {
+    let f1 = BitFlags128(0b0000);
+    let f2 = BitFlags128(0b0001);
+    let f3 = BitFlags128(0b1001);
+
+    assert_eq!(f1.difference(f2), BitFlags128(0b0000));
+    assert_eq!(f1.difference(f3), BitFlags128(0b0000));
+    assert_eq!(f2.difference(f3), BitFlags128(0b0000));
+    assert_eq!(f3.difference(f2), BitFlags128(0b1000));
+    assert_eq!(f3.difference(f1), BitFlags128(0b1001));
+    assert_eq!(f2.difference(f1), BitFlags128(0b0001));
 }
 
 #[test]

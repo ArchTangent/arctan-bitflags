@@ -63,6 +63,11 @@ impl BitFlags32 {
     pub fn intersection(&self, other: Self) -> BitFlags32 {
         BitFlags32(self.0 & other.0)
     }
+    /// Returns the bits set in `self` that are *not* set in `other`.
+    #[inline]
+    pub fn difference(&self, other: Self) -> BitFlags32 {
+        BitFlags32(self.0 & !other.0)
+    }        
     /// Bitwise `OR` (`|`) of two flags.
     #[inline]
     pub fn union(&self, other: Self) -> BitFlags32 {
@@ -73,7 +78,7 @@ impl BitFlags32 {
     pub fn complement(&self) -> BitFlags32 {
         BitFlags32(!self.0)
     }
-    /// Returns true if current flags contain _all_ incoming flags.
+    /// Returns `true`` if current flags contain _all_ incoming flags.
     #[inline]
     pub fn contains(&self, other: BitFlags32) -> bool {
         (self.0 & other.0) == other.0

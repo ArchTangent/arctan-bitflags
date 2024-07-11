@@ -1,5 +1,6 @@
 //! BitFlags with a `u8` representation.
 
+
 use core::convert::TryFrom;
 
 /// 8-bit bitflags, indexed from bit indexes `[0]` to `[7]`.
@@ -63,6 +64,11 @@ impl BitFlags8 {
     pub fn intersection(&self, other: Self) -> BitFlags8 {
         BitFlags8(self.0 & other.0)
     }
+    /// Returns the bits set in `self` that are *not* set in `other`.
+    #[inline]
+    pub fn difference(&self, other: Self) -> BitFlags8 {
+        BitFlags8(self.0 & !other.0)
+    }    
     /// Bitwise `OR` (`|`) of two flags.
     #[inline]
     pub fn union(&self, other: Self) -> BitFlags8 {
@@ -73,7 +79,7 @@ impl BitFlags8 {
     pub fn complement(&self) -> BitFlags8 {
         BitFlags8(!self.0)
     }    
-    /// Returns true if current flags contain _all_ incoming flags.
+    /// Returns `true`` if current flags contain _all_ incoming flags.
     #[inline]
     pub fn contains(&self, other: Self) -> bool {
         (self.0 & other.0) == other.0
