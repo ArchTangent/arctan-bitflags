@@ -261,6 +261,12 @@ impl core::ops::BitAnd<BitFlags128> for BitFlags128 {
     }
 }
 
+impl core::ops::BitAndAssign<BitFlags128> for BitFlags128 {
+    fn bitand_assign(&mut self, rhs: BitFlags128) {
+        self.0 &= rhs.0
+    }
+}
+
 impl core::ops::BitXor<BitFlags128> for BitFlags128 {
     type Output = BitFlags128;
 

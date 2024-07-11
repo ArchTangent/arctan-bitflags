@@ -251,9 +251,15 @@ impl core::ops::BitOrAssign<BitFlags8> for BitFlags8 {
 
 impl core::ops::BitAnd<BitFlags8> for BitFlags8 {
     type Output = BitFlags8;
-
+    
     fn bitand(self, rhs: BitFlags8) -> Self::Output {
         BitFlags8(self.0 & rhs.0)
+    }
+}
+
+impl core::ops::BitAndAssign<BitFlags8> for BitFlags8 {
+    fn bitand_assign(&mut self, rhs: BitFlags8) {
+        self.0 &= rhs.0
     }
 }
 

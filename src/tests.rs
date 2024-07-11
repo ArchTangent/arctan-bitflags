@@ -55,13 +55,13 @@ fn bitflags8_ops_assign() {
     flags1 |= flags3;
     assert_eq!(flags1, BitFlags8(0b1011));
     
-    // let mut flags1 = BitFlags8(0b0001);
+    let mut flags1 = BitFlags8(0b0001);
 
-    // flags1 &= flags2;
-    // assert_eq!(flags1, BitFlags8(0b0000));
+    flags1 &= flags2;
+    assert_eq!(flags1, BitFlags8(0b0000));
 
-    // flags1 &= flags3;
-    // assert_eq!(flags1, BitFlags8(0b0000));
+    flags1 &= flags3;
+    assert_eq!(flags1, BitFlags8(0b0000));
 }
 
 #[test]
@@ -388,13 +388,13 @@ fn bitflags16_ops_assign() {
     flags1 |= flags3;
     assert_eq!(flags1, BitFlags16(0b1011));
     
-    // let mut flags1 = BitFlags16(0b0001);
+    let mut flags1 = BitFlags16(0b0001);
 
-    // flags1 &= flags2;
-    // assert_eq!(flags1, BitFlags16(0b0000));
+    flags1 &= flags2;
+    assert_eq!(flags1, BitFlags16(0b0000));
 
-    // flags1 &= flags3;
-    // assert_eq!(flags1, BitFlags16(0b0000));
+    flags1 &= flags3;
+    assert_eq!(flags1, BitFlags16(0b0000));
 }
 
 #[test]
@@ -721,13 +721,13 @@ fn bitflags32_ops_assign() {
     flags1 |= flags3;
     assert_eq!(flags1, BitFlags32(0b1011));
     
-    // let mut flags1 = BitFlags32(0b0001);
+    let mut flags1 = BitFlags32(0b0001);
 
-    // flags1 &= flags2;
-    // assert_eq!(flags1, BitFlags32(0b0000));
+    flags1 &= flags2;
+    assert_eq!(flags1, BitFlags32(0b0000));
 
-    // flags1 &= flags3;
-    // assert_eq!(flags1, BitFlags32(0b0000));
+    flags1 &= flags3;
+    assert_eq!(flags1, BitFlags32(0b0000));
 }
 
 #[test]
@@ -1054,13 +1054,13 @@ fn bitflags64_ops_assign() {
     flags1 |= flags3;
     assert_eq!(flags1, BitFlags64(0b1011));
     
-    // let mut flags1 = BitFlags64(0b0001);
+    let mut flags1 = BitFlags64(0b0001);
 
-    // flags1 &= flags2;
-    // assert_eq!(flags1, BitFlags64(0b0000));
+    flags1 &= flags2;
+    assert_eq!(flags1, BitFlags64(0b0000));
 
-    // flags1 &= flags3;
-    // assert_eq!(flags1, BitFlags64(0b0000));
+    flags1 &= flags3;
+    assert_eq!(flags1, BitFlags64(0b0000));
 }
 
 #[test]
@@ -1387,13 +1387,13 @@ fn bitflags128_ops_assign() {
     flags1 |= flags3;
     assert_eq!(flags1, BitFlags128(0b1011));
     
-    // let mut flags1 = BitFlags128(0b0001);
+    let mut flags1 = BitFlags128(0b0001);
 
-    // flags1 &= flags2;
-    // assert_eq!(flags1, BitFlags128(0b0000));
+    flags1 &= flags2;
+    assert_eq!(flags1, BitFlags128(0b0000));
 
-    // flags1 &= flags3;
-    // assert_eq!(flags1, BitFlags128(0b0000));
+    flags1 &= flags3;
+    assert_eq!(flags1, BitFlags128(0b0000));
 }
 
 #[test]
