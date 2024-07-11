@@ -37,6 +37,10 @@ fn bitflags8_ops() {
 
     assert_eq!(flags1 ^ flags2, BitFlags8(0b0011));
     assert_eq!(flags1 ^ flags3, BitFlags8(0b1000));
+
+    assert_eq!(!flags1, BitFlags8(0b1111_1110));
+    assert_eq!(!flags2, BitFlags8(0b1111_1101));
+    assert_eq!(!flags3, BitFlags8(0b1111_0110));
 }
 
 #[test]
@@ -345,6 +349,10 @@ fn bitflags16_ops() {
 
     assert_eq!(flags1 ^ flags2, BitFlags16(0b0011));
     assert_eq!(flags1 ^ flags3, BitFlags16(0b1000));
+
+    assert_eq!(!flags1, BitFlags16(0b11111111_1111_1110));
+    assert_eq!(!flags2, BitFlags16(0b11111111_1111_1101));
+    assert_eq!(!flags3, BitFlags16(0b11111111_1111_0110));
 }
 
 #[test]
@@ -653,6 +661,10 @@ fn bitflags32_ops() {
 
     assert_eq!(flags1 ^ flags2, BitFlags32(0b0011));
     assert_eq!(flags1 ^ flags3, BitFlags32(0b1000));
+
+    assert_eq!(!flags1, BitFlags32(0b11111111_11111111_11111111_1111_1110));
+    assert_eq!(!flags2, BitFlags32(0b11111111_11111111_11111111_1111_1101));
+    assert_eq!(!flags3, BitFlags32(0b11111111_11111111_11111111_1111_0110));
 }
 
 #[test]
@@ -961,6 +973,10 @@ fn bitflags64_ops() {
 
     assert_eq!(flags1 ^ flags2, BitFlags64(0b0011));
     assert_eq!(flags1 ^ flags3, BitFlags64(0b1000));
+
+    assert_eq!(!flags1, BitFlags64(0b11111111_11111111_11111111_11111111_11111111_11111111_11111111_1111_1110));
+    assert_eq!(!flags2, BitFlags64(0b11111111_11111111_11111111_11111111_11111111_11111111_11111111_1111_1101));
+    assert_eq!(!flags3, BitFlags64(0b11111111_11111111_11111111_11111111_11111111_11111111_11111111_1111_0110));
 }
 
 #[test]
@@ -1269,6 +1285,10 @@ fn bitflags128_ops() {
 
     assert_eq!(flags1 ^ flags2, BitFlags128(0b0011));
     assert_eq!(flags1 ^ flags3, BitFlags128(0b1000));
+
+    assert_eq!(!flags1, BitFlags128(0b11111111_11111111_11111111_11111111_11111111_11111111_11111111_11111111_11111111_11111111_11111111_11111111_11111111_11111111_11111111_1111_1110));
+    assert_eq!(!flags2, BitFlags128(0b11111111_11111111_11111111_11111111_11111111_11111111_11111111_11111111_11111111_11111111_11111111_11111111_11111111_11111111_11111111_1111_1101));
+    assert_eq!(!flags3, BitFlags128(0b11111111_11111111_11111111_11111111_11111111_11111111_11111111_11111111_11111111_11111111_11111111_11111111_11111111_11111111_11111111_1111_0110));
 }
 
 #[test]

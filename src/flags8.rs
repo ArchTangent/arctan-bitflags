@@ -259,6 +259,14 @@ impl core::ops::BitXor<BitFlags8> for BitFlags8 {
     }
 }
 
+impl core::ops::Not for BitFlags8 {
+    type Output = BitFlags8;
+
+    fn not(self) -> Self::Output {
+        BitFlags8(!self.0)
+    }
+}
+
 /// Iterator over set bits of a `BitFlags8`.
 pub struct BitFlagsIter8 {
     current_bit: usize,

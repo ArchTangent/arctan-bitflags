@@ -260,6 +260,14 @@ impl core::ops::BitXor<BitFlags16> for BitFlags16 {
     }
 }
 
+impl core::ops::Not for BitFlags16 {
+    type Output = BitFlags16;
+
+    fn not(self) -> Self::Output {
+        BitFlags16(!self.0)
+    }
+}
+
 /// Iterator over set bits of a `BitFlags16`.
 pub struct BitFlagsIter16 {
     current_bit: usize,
