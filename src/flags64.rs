@@ -274,6 +274,12 @@ impl core::ops::BitXor<BitFlags64> for BitFlags64 {
     }
 }
 
+impl core::ops::BitXorAssign<BitFlags64> for BitFlags64 {
+    fn bitxor_assign(&mut self, rhs: BitFlags64) {
+        self.0 ^= rhs.0
+    }
+}
+
 impl core::ops::Not for BitFlags64 {
     type Output = BitFlags64;
 

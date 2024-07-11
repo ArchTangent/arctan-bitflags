@@ -272,6 +272,12 @@ impl core::ops::BitXor<BitFlags16> for BitFlags16 {
     }
 }
 
+impl core::ops::BitXorAssign<BitFlags16> for BitFlags16 {
+    fn bitxor_assign(&mut self, rhs: BitFlags16) {
+        self.0 ^= rhs.0
+    }
+}
+
 impl core::ops::Not for BitFlags16 {
     type Output = BitFlags16;
 
