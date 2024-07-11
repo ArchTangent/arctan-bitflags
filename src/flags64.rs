@@ -105,10 +105,10 @@ impl BitFlags64 {
             self.remove_at_index(index);
         }
     }
-    /// Toggles current flags based on incoming `BitFlags64` (bitwise XOR).
+    /// Toggles current flags based on mask (using bitwise XOR).
     #[inline]
-    pub fn toggle(&mut self, other: BitFlags64) {
-        self.0 = self.0 ^ other.0;
+    pub fn toggle(&mut self, mask: Self) {
+        self.0 = self.0 ^ mask.0;
     }
     /// Toggles flag at given index.  Only 64 indexes allowed (0-63).
     #[inline]
