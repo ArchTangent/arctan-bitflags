@@ -68,6 +68,11 @@ impl BitFlags16 {
     pub fn union(&self, other: Self) -> BitFlags16 {
         BitFlags16(self.0 | other.0)
     }
+    /// Bitwise negation (`!`) of given flags.
+    #[inline]
+    pub fn complement(&self) -> BitFlags16 {
+        BitFlags16(!self.0)
+    }
     /// Returns true if current flags contain _all_ incoming flags.
     #[inline]
     pub fn contains(&self, other: Self) -> bool {

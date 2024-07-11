@@ -41,6 +41,10 @@ fn bitflags8_ops() {
     assert_eq!(!f1, BitFlags8(0b1111_1110));
     assert_eq!(!f2, BitFlags8(0b1111_1101));
     assert_eq!(!f3, BitFlags8(0b1111_0110));
+
+    assert_eq!(f1.complement(), BitFlags8(0b1111_1110));
+    assert_eq!(f2.complement(), BitFlags8(0b1111_1101));
+    assert_eq!(f3.complement(), BitFlags8(0b1111_0110));
 }
 
 #[test]
@@ -312,14 +316,14 @@ fn bitflags8_set_at_index() {
 
 #[test]
 fn bitflags8_toggle() {
-    let mut f1 = BitFlags8(0b0101);    
+    let mut f1 = BitFlags8(0b0101);
     f1.toggle(BitFlags8(0b0000));
     assert_eq!(f1, BitFlags8(0b0101));
-    
+
     let mut f1 = BitFlags8(0b0101);
     f1.toggle(BitFlags8(0b0011));
     assert_eq!(f1, BitFlags8(0b0110));
-    
+
     let mut f1 = BitFlags8(0b0101);
     f1.toggle(BitFlags8(0b1111));
     assert_eq!(f1, BitFlags8(0b1010));
@@ -397,6 +401,10 @@ fn bitflags16_ops() {
     assert_eq!(!f1, BitFlags16(0b11111111_1111_1110));
     assert_eq!(!f2, BitFlags16(0b11111111_1111_1101));
     assert_eq!(!f3, BitFlags16(0b11111111_1111_0110));
+
+    assert_eq!(f1.complement(), BitFlags16(0b11111111_1111_1110));
+    assert_eq!(f2.complement(), BitFlags16(0b11111111_1111_1101));
+    assert_eq!(f3.complement(), BitFlags16(0b11111111_1111_0110));
 }
 
 #[test]
@@ -668,14 +676,14 @@ fn bitflags16_set_at_index() {
 
 #[test]
 fn bitflags16_toggle() {
-    let mut f1 = BitFlags16(0b0101);    
+    let mut f1 = BitFlags16(0b0101);
     f1.toggle(BitFlags16(0b0000));
     assert_eq!(f1, BitFlags16(0b0101));
-    
+
     let mut f1 = BitFlags16(0b0101);
     f1.toggle(BitFlags16(0b0011));
     assert_eq!(f1, BitFlags16(0b0110));
-    
+
     let mut f1 = BitFlags16(0b0101);
     f1.toggle(BitFlags16(0b1111));
     assert_eq!(f1, BitFlags16(0b1010));
@@ -753,6 +761,10 @@ fn bitflags32_ops() {
     assert_eq!(!f1, BitFlags32(0b11111111_11111111_11111111_1111_1110));
     assert_eq!(!f2, BitFlags32(0b11111111_11111111_11111111_1111_1101));
     assert_eq!(!f3, BitFlags32(0b11111111_11111111_11111111_1111_0110));
+
+    assert_eq!(f1.complement(), BitFlags32(0b11111111_11111111_11111111_1111_1110));
+    assert_eq!(f2.complement(), BitFlags32(0b11111111_11111111_11111111_1111_1101));
+    assert_eq!(f3.complement(), BitFlags32(0b11111111_11111111_11111111_1111_0110));
 }
 
 #[test]
@@ -1024,14 +1036,14 @@ fn bitflags32_set_at_index() {
 
 #[test]
 fn bitflags32_toggle() {
-    let mut f1 = BitFlags32(0b0101);    
+    let mut f1 = BitFlags32(0b0101);
     f1.toggle(BitFlags32(0b0000));
     assert_eq!(f1, BitFlags32(0b0101));
-    
+
     let mut f1 = BitFlags32(0b0101);
     f1.toggle(BitFlags32(0b0011));
     assert_eq!(f1, BitFlags32(0b0110));
-    
+
     let mut f1 = BitFlags32(0b0101);
     f1.toggle(BitFlags32(0b1111));
     assert_eq!(f1, BitFlags32(0b1010));
@@ -1116,6 +1128,19 @@ fn bitflags64_ops() {
     );
     assert_eq!(
         !f3,
+        BitFlags64(0b11111111_11111111_11111111_11111111_11111111_11111111_11111111_1111_0110)
+    );
+
+    assert_eq!(
+        f1.complement(),
+        BitFlags64(0b11111111_11111111_11111111_11111111_11111111_11111111_11111111_1111_1110)
+    );
+    assert_eq!(
+        f2.complement(),
+        BitFlags64(0b11111111_11111111_11111111_11111111_11111111_11111111_11111111_1111_1101)
+    );
+    assert_eq!(
+        f3.complement(),
         BitFlags64(0b11111111_11111111_11111111_11111111_11111111_11111111_11111111_1111_0110)
     );
 }
@@ -1389,14 +1414,14 @@ fn bitflags64_set_at_index() {
 
 #[test]
 fn bitflags64_toggle() {
-    let mut f1 = BitFlags64(0b0101);    
+    let mut f1 = BitFlags64(0b0101);
     f1.toggle(BitFlags64(0b0000));
     assert_eq!(f1, BitFlags64(0b0101));
-    
+
     let mut f1 = BitFlags64(0b0101);
     f1.toggle(BitFlags64(0b0011));
     assert_eq!(f1, BitFlags64(0b0110));
-    
+
     let mut f1 = BitFlags64(0b0101);
     f1.toggle(BitFlags64(0b1111));
     assert_eq!(f1, BitFlags64(0b1010));
@@ -1474,6 +1499,10 @@ fn bitflags128_ops() {
     assert_eq!(!f1, BitFlags128(0b11111111_11111111_11111111_11111111_11111111_11111111_11111111_11111111_11111111_11111111_11111111_11111111_11111111_11111111_11111111_1111_1110));
     assert_eq!(!f2,  BitFlags128(0b11111111_11111111_11111111_11111111_11111111_11111111_11111111_11111111_11111111_11111111_11111111_11111111_11111111_11111111_11111111_1111_1101));
     assert_eq!(!f3,  BitFlags128(0b11111111_11111111_11111111_11111111_11111111_11111111_11111111_11111111_11111111_11111111_11111111_11111111_11111111_11111111_11111111_1111_0110));
+
+    assert_eq!(f1.complement(), BitFlags128(0b11111111_11111111_11111111_11111111_11111111_11111111_11111111_11111111_11111111_11111111_11111111_11111111_11111111_11111111_11111111_1111_1110));
+    assert_eq!(f2.complement(), BitFlags128(0b11111111_11111111_11111111_11111111_11111111_11111111_11111111_11111111_11111111_11111111_11111111_11111111_11111111_11111111_11111111_1111_1101));
+    assert_eq!(f3.complement(), BitFlags128(0b11111111_11111111_11111111_11111111_11111111_11111111_11111111_11111111_11111111_11111111_11111111_11111111_11111111_11111111_11111111_1111_0110));
 }
 
 #[test]
@@ -1745,14 +1774,14 @@ fn bitflags128_set_at_index() {
 
 #[test]
 fn bitflags128_toggle() {
-    let mut f1 = BitFlags128(0b0101);    
+    let mut f1 = BitFlags128(0b0101);
     f1.toggle(BitFlags128(0b0000));
     assert_eq!(f1, BitFlags128(0b0101));
-    
+
     let mut f1 = BitFlags128(0b0101);
     f1.toggle(BitFlags128(0b0011));
     assert_eq!(f1, BitFlags128(0b0110));
-    
+
     let mut f1 = BitFlags128(0b0101);
     f1.toggle(BitFlags128(0b1111));
     assert_eq!(f1, BitFlags128(0b1010));
