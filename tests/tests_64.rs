@@ -13,7 +13,7 @@ fn bitflags64_creation() {
     assert_eq!(f1c, f1d);
 
     let f2a = BitFlags64::from_slice(&[2, 4, 5]);
-    let f2b = BitFlags64::from_bits(0b0011_0100);
+    let f2b = BitFlags64::from_u64(0b0011_0100);
     assert_eq!(f2a, f2b);
 }
 
@@ -95,7 +95,7 @@ fn bitflags64_general() {
     let va = BitFlags64(u64::MAX);
 
     assert!(v0.is_empty());
-    assert!(va.is_all());
+    assert!(va.is_full());
     assert!(BitFlags64(0b00000010).intersects(BitFlags64(0b00000111)));
     assert!(!BitFlags64(0b00000010).intersects(BitFlags64(0b00100000)));
     assert!(BitFlags64(0b00000111).contains(BitFlags64(0b00000011)));

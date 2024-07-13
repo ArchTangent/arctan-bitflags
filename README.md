@@ -16,18 +16,24 @@ Bitflag structures with 8, 16, 32, 64, and 128-bit representation.
 A new empty instance:
 ```rust
 let flags = BitFlags8::new();
+
+let flags = BitFlags8::empty();
 ```
 
 A new instance with all bits set:
 ```rust
-let flags = BitFlags8::all();
+let flags = BitFlags8::full();
+
+let flags = BitFlags8::from_u8(u8::MAX);
+
+let flags = BitFlags8::from(u8::MAX);
 ```
 
-A new instance from corresponding integer (all three are identical):
+A new instance from corresponding integer (all below are identical):
 ```rust
 let flags = BitFlags8(0b0110);
 
-let flags = BitFlags8::from_bits(0b0110);
+let flags = BitFlags8::from_u8(0b0110);
 
 let flags = BitFlags8::from(6u8);
 
@@ -105,10 +111,8 @@ The primary purpose for creation of this library is for *games*. I wanted a bitf
 
 I wanted something like the excellent `bitflags` crate without having to define flags in a `struct` with named fields. Many of my games and utilities use flags and enums derived from external (deserialized) lists of strings. As such, this library was born.
 
-## To-Dos
+### License
 
-- Add `str` to `flag` conversion with `StrToFlag` types.
+Licensed under either of [Apache License, Version 2.0](LICENSE-APACHE) or [MIT license](LICENSE-MIT), your choice.
 
-- Add `serde` and/or `nanoserde` support.
-
-- Examples in doc comments.
+Unless you explicitly state otherwise, any contribution intentionally submitted for inclusion in Serde by you, as defined in the Apache-2.0 license, shall be dual licensed as above, without any additional terms or conditions.

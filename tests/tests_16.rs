@@ -13,7 +13,7 @@ fn bitflags16_creation() {
     assert_eq!(f1c, f1d);
 
     let f2a = BitFlags16::from_slice(&[2, 4, 5]);
-    let f2b = BitFlags16::from_bits(0b0011_0100);
+    let f2b = BitFlags16::from_u16(0b0011_0100);
     assert_eq!(f2a, f2b);
 }
 
@@ -77,7 +77,7 @@ fn bitflags16_general() {
     let va = BitFlags16(u16::MAX);
 
     assert!(v0.is_empty());
-    assert!(va.is_all());
+    assert!(va.is_full());
     assert!(BitFlags16(0b00000010).intersects(BitFlags16(0b00000111)));
     assert!(!BitFlags16(0b00000010).intersects(BitFlags16(0b00100000)));
     assert!(BitFlags16(0b00000111).contains(BitFlags16(0b00000011)));

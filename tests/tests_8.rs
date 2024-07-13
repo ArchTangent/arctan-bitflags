@@ -13,7 +13,7 @@ fn bitflags8_creation() {
     assert_eq!(f1c, f1d);
 
     let f2a = BitFlags8::from_slice(&[2, 4, 5]);
-    let f2b = BitFlags8::from_bits(0b0011_0100);
+    let f2b = BitFlags8::from_u8(0b0011_0100);
     assert_eq!(f2a, f2b);
 }
 
@@ -77,7 +77,7 @@ fn bitflags8_general() {
     let va = BitFlags8(0b11111111);
 
     assert!(v0.is_empty());
-    assert!(va.is_all());
+    assert!(va.is_full());
     assert!(BitFlags8(0b00000010).intersects(BitFlags8(0b00000111)));
     assert!(!BitFlags8(0b00000010).intersects(BitFlags8(0b00100000)));
     assert!(BitFlags8(0b00000111).contains(BitFlags8(0b00000011)));

@@ -7,31 +7,38 @@ use core::convert::TryFrom;
 pub struct BitFlags128(pub u128);
 
 impl BitFlags128 {
-    /// Returns new (empty) instance.
+    /// Returns a new instance with all bits set to `0`.
     pub fn new() -> Self {
         Self::empty()
     }
-    /// Returns empty `BitFlags128` (with value of 0).
+    /// Returns a new instance with all bits set to `0`.
     #[inline]
     pub fn empty() -> Self {
         Self(0)
     }
-    /// Returns full `BitFlags128` (with value of u128::MAX).
+    /// Returns a new instance with all bits set to `1`.
     #[inline]
-    pub fn all() -> Self {
+    pub fn full() -> Self {
         Self(u128::MAX)
     }
-    /// Returns new instance using specified bits.
+    /// Returns a new instance from a `u128`.
     #[inline]
-    pub fn from_bits(val: u128) -> Self {
+    pub fn from_u128(val: u128) -> Self {
         Self(val)
     }
-    /// Converts an index into a BitFlag. 128 indexes allowed (0-127).
+    /// Returns the underlying `u128` value.
+    #[inline]
+    pub fn to_u128(&self) -> u128 {
+        self.0
+    }
+    /// Converts an index (0-127) into a `BitFlags128`.
+    /// 
+    /// __Panics__ if `index > 127`.
     #[inline]
     pub fn from_index(index: usize) -> Self {
         Self::try_from(index).unwrap()
     }
-    /// Converts a slice of indexes into a BitFlag. 128 indexes allowed (0-127).
+    /// Converts a slice of indexes (0-127) into a `BitFlags128`.
     #[inline]
     pub fn from_slice(s: &[usize]) -> Self {
         let mut bits = Self(0);
@@ -43,61 +50,62 @@ impl BitFlags128 {
 
         bits
     }
-    /// Returns true if no flags are set.
+    /// Returns `true` if _no_ bits are set.
     #[inline]
     pub fn is_empty(&self) -> bool {
         self.0 == 0
     }
-    /// Returns true if all flags are set.
+    /// Returns `true` if _all_ bits are set.
     #[inline]
-    pub fn is_all(&self) -> bool {
+    pub fn is_full(&self) -> bool {
         self.0 == u128::MAX
     }
-    /// Returns true if current flags contain _at least one_ of the incoming flags.
+    /// Returns `true` if `self` and `other` have _at least one_ matching set bit.
     #[inline]
     pub fn intersects(&self, other: BitFlags128) -> bool {
         (self.0 & other.0) > 0
     }
-    /// Bitwise `AND` (`&`) of two flags.
+    /// Returns the bitwise `AND` (`&`) of two flags.
     #[inline]
     pub fn intersection(&self, other: Self) -> BitFlags128 {
         BitFlags128(self.0 & other.0)
     }
-    /// Returns the bits set in `self` that are *not* set in `other`.
+    /// Returns the bits set in `self` that are _not_ set in `other`.
     #[inline]
     pub fn difference(&self, other: Self) -> BitFlags128 {
         BitFlags128(self.0 & !other.0)
     }
-    /// Returns the bits set in `self` or `other`, but *not* both, using bitwise `XOR` (`^`).
+    /// Returns the bits set in `self` or `other`, but _not_ both, using bitwise `XOR` (`^`).
     #[inline]
     pub fn symmetric_difference(&self, other: Self) -> BitFlags128 {
         BitFlags128(self.0 ^ other.0)
     }
-    /// Bitwise `OR` (`|`) of two flags.
+    /// Returns the bitwise `OR` (`|`) of two flags.
     #[inline]
     pub fn union(&self, other: Self) -> BitFlags128 {
         BitFlags128(self.0 | other.0)
     }
-    /// Bitwise negation (`!`) of given flags.
+    /// Returns the bitwise negation (`!`) of given flags.
     #[inline]
     pub fn complement(&self) -> BitFlags128 {
         BitFlags128(!self.0)
     }
-    /// Returns `true`` if current flags contain _all_ incoming flags.
+    /// Returns `true` if current flags contain _all_ incoming flags.
     #[inline]
     pub fn contains(&self, other: BitFlags128) -> bool {
         (self.0 & other.0) == other.0
     }
-    /// Inserts flags into current `BitFlags128` (bitwise OR).
+    /// Inserts `other` flags into current flags using bitwise `OR` (`|`).
     #[inline]
     pub fn insert(&mut self, other: BitFlags128) {
         self.0 = self.0 | other.0;
     }
-    /// Inserts flag at given index to specific value (true or false; 0 or 1).  
-    /// Only 128 indexes allowed (0-127).
+    /// Sets bit at given index (0-127).
+    /// 
+    /// __Panics__ if `index > 127`.
     #[inline]
     pub fn insert_at_index(&mut self, index: usize) {
-        assert!(index < 128, "up to 128 unique tags allowed per category for BitFlags128");
+        assert!(index < 128, "BitFlags128 structs are indexed from 0 to 127");
         self.0 = self.0 | 2_u128.pow(index as u32);
     }
     /// Inserts `other` if `value` is `true`; removes `other` if `value` is `false`.
@@ -109,37 +117,42 @@ impl BitFlags128 {
             self.remove(other);
         }
     }
-    /// Sets flag at given index to specific value (true or false; 0 or 1).  Only 128
-    /// indexes allowed (0-127).
+    /// Sets bit at given index (0-127) to specific value (`true` = `1`; `false` = `0`).
+    /// 
+    /// __Panics__ if `index > 127`.
     #[inline]
     pub fn set_at_index(&mut self, index: usize, value: bool) {
-        assert!(index < 128, "up to 128 unique tags allowed per category for BitFlags128");
+        assert!(index < 128, "BitFlags128 structs are indexed from 0 to 127");
         if value {
             self.insert_at_index(index);
         } else {
             self.remove_at_index(index);
         }
     }
-    /// Toggles current flags based on mask (using bitwise XOR).
+    /// Toggles bits based on mask (using bitwise `XOR`).
     #[inline]
     pub fn toggle(&mut self, mask: Self) {
         self.0 = self.0 ^ mask.0;
     }
-    /// Toggles flag at given index.  Only 128 indexes allowed (0-127).
+    /// Toggles bit at given index (0-127).
+    /// 
+    /// __Panics__ if `index > 127`.
     #[inline]
     pub fn toggle_at_index(&mut self, index: usize) {
-        assert!(index < 128, "up to 128 unique tags allowed per category for BitFlags128");
+        assert!(index < 128, "BitFlags128 structs are indexed from 0 to 127");
         self.0 = self.0 ^ 2_u128.pow(index as u32);
     }
-    /// Removes current flags that match those of incoming `BitFlags128` (bitwise AND NOT).
+    /// Unsets bits that match those of incoming `BitFlags128` (bitwise `AND NOT`).
     #[inline]
     pub fn remove(&mut self, other: BitFlags128) {
         self.0 = self.0 & !other.0;
     }
-    /// Removes flag at given index.  Only 128 indexes allowed (0-127).
+    /// Unsets bit at given index (0-127). Indexes 0-127 allowed.
+    /// 
+    /// __Panics__ if `index > 127`.
     #[inline]
     pub fn remove_at_index(&mut self, index: usize) {
-        assert!(index < 128, "up to 128 unique tags allowed per category for BitFlags128");
+        assert!(index < 128, "BitFlags128 structs are indexed from 0 to 127");
         self.0 = self.0 & !2_u128.pow(index as u32);
     }
     /// Returns the bits (internal value).
@@ -152,16 +165,16 @@ impl BitFlags128 {
     pub fn num_bits() -> usize {
         128
     }
-    /// Returns value of bit at given index (0 is false; 1 is true).
+    /// Returns value of bit at given index (`0` is `false`; `1` is `true`).
     ///
-    /// Indexes (0-127) allowed. Will panic if index is out of bounds.
+    /// __Panics__ if `index > 127`.
     #[inline]
     pub fn bit_at_index(&self, index: usize) -> bool {
-        assert!(index < 128, "up to 128 unique flags allowed for BitFlags16");
+        assert!(index < 128, "BitFlags128 structs are indexed from 0 to 127");
         self.0 & 2_u128.pow(index as u32) > 0
     }
-    /// Returns value of bit at given index (0 is false; 1 is true).  Returns None if out
-    /// of bounds.  For cases not meant to fail, index directly with core::ops::Index.
+    /// Returns value of bit at given index (`0` is `false`; `1` is `true`). Returns `None` if out
+    /// of bounds.
     #[inline]
     pub fn get_bit_at_index(&self, index: usize) -> Option<bool> {
         if index < 128 {
@@ -169,7 +182,7 @@ impl BitFlags128 {
         }
         None
     }
-    /// Returns the value of the highest set bit (`1`) of the bitflag.  If None -> `0`.
+    /// Returns the value of the highest set bit of the bitflag. If `None` -> `0`.
     #[inline]
     pub fn highest_set_bit(&self) -> u128 {
         let mut n = self.0.clone();
@@ -182,7 +195,7 @@ impl BitFlags128 {
         n |= n >> 64;
         n - (n >> 1)
     }
-    /// Returns the index of the highest set bit (`1`) of the bitflag, if present
+    /// Returns the index of the highest set bit of the bitflag, if present.
     #[inline]
     pub fn highest_set_bit_index(&self) -> Option<usize> {
         if self.0 == 0 {
@@ -203,9 +216,11 @@ impl BitFlags128 {
     pub fn count_ones(&self) -> u32 {
         self.0.count_ones()
     }
-    /// Iterates over set bits of the structure.  Returns `Some(bit_index)` if the
-    /// bit is 1, otherwise `None`.  E.g. collecting `0b00001001` into a vector would
-    /// produce `vec![0, 3]`, representing the 0th and 3rd indexes.
+    /// Iterates over set bits of the structure. Returns `Some(bit_index)` if the
+    /// bit is set, otherwise `None`.
+    ///
+    /// E.g. collecting `0b00001001` into a vector would produce `vec![0, 3]`,
+    /// representing the 0th and 3rd indexes.
     #[inline]
     pub fn iter(&self) -> BitFlagsIter128 {
         BitFlagsIter128 { current_bit: 0, bits: self.0 }
@@ -225,7 +240,7 @@ impl TryFrom<u32> for BitFlags128 {
         if value < 128 {
             Ok(Self(2_u128.pow(value)))
         } else {
-            Err("BitFlags128 allows indexes of 0-127 only")
+            Err("BitFlags128 structs are indexed from 0 to 127")
         }
     }
 }
@@ -237,7 +252,7 @@ impl TryFrom<usize> for BitFlags128 {
         if value < 128 {
             Ok(Self(2_u128.pow(value as u32)))
         } else {
-            Err("BitFlags128 allows indexes of 0-127 only")
+            Err("BitFlags128 structs are indexed from 0 to 127")
         }
     }
 }
@@ -299,7 +314,7 @@ impl core::ops::BitXorAssign<BitFlags128> for BitFlags128 {
 impl core::ops::Not for BitFlags128 {
     type Output = BitFlags128;
 
-    /// Toggles *all* bits.
+    /// Toggles _all_ bits.
     fn not(self) -> Self::Output {
         BitFlags128(!self.0)
     }
