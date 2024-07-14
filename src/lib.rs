@@ -1,6 +1,7 @@
 //! BitFlags with integer (`u8`, `u16`, `u32`, `u64`, `u128`) representation.
 //!
 //! For more information on the logic involved, refer to the useful wiki on [Set Theory](https://en.wikipedia.org/wiki/Set_theory).
+#![no_std]
 
 mod flags_8;
 mod flags_16;

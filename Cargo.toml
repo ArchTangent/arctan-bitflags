@@ -1,9 +1,24 @@
 [package]
 name = "arctan-bitflags"
-version = "0.9.1"
+version = "0.9.2-alpha.1"
 edition = "2021"
 authors = ["ArchTangent"]
 categories = ["bitflags", "no-std"]
 keywords = ["bitflags", "no-std"]
 
+# `serde` is used when `serde-support` feature is enabled.
 [dependencies]
+serde = { version = "~1.0",  optional = true }
+nanoserde = { version = "~0.1",  optional = true }
+
+# `arctan-bitflags` needs optional `serde-support` and `nanoserde-support` features for testing
+# `serde` and `serde_json` are used to verify `serde` functionality when testing
+# `nanoserde` is used to verify `nanoserde` functionality when testing
+[dev-dependencies]
+serde = { version = "~1.0" } 
+serde_json = { version = "~1.0" }
+arctan-bitflags = { path = ".", features = ["serde-support", "nanoserde-support"] }
+
+[features]
+serde-support = ["serde"]
+nanoserde-support = ["nanoserde"]

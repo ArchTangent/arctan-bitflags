@@ -339,3 +339,66 @@ impl core::iter::Iterator for BitFlagsIter8 {
         None
     }
 }
+
+//  #######   ########   ######   ########  #######
+//  ##    ##  ##        ##        ##        ##    ##
+//  ##    ##  ######     ######   ######    #######
+//  ##    ##  ##              ##  ##        ##   ##
+//  #######   ########  #######   ########  ##    ##
+
+#[cfg(feature = "serde-support")]
+mod impl_serde {
+    use super::BitFlags8;
+    use serde::{Deserialize, Serialize};
+    
+    impl<'de> Deserialize<'de> for BitFlags8 {
+        fn deserialize<D: serde::Deserializer<'de>>(d: D) -> Result<BitFlags8, D::Error> {
+            let val = u8::deserialize(d)?;
+            Ok(BitFlags8(val))
+        }
+    }
+    
+    impl Serialize for BitFlags8
+    {
+        fn serialize<S: serde::Serializer>(&self, s: S) -> Result<S::Ok, S::Error> {
+            u8::serialize(&self.0, s)
+        }
+    }
+}
+
+#[cfg(feature = "nanoserde-support")]
+mod impl_nanoserde {
+    use super::BitFlags8;
+    use nanoserde::{DeRon, DeRonErr, DeRonState, DeJson, DeJsonState, DeJsonErr, DeBin, DeBinErr};
+
+    impl DeRon for BitFlags8 {
+        fn de_ron(state: &mut DeRonState, input: &mut core::str::Chars) -> Result<Self, DeRonErr> {
+            let val = state.u64_range(u8::MAX as u64)?;
+            state.next_tok(input)?;
+            Ok(BitFlags8(val as u8))
+        }
+    }
+
+    impl DeJson for BitFlags8 {
+        fn de_json(state: &mut DeJsonState, input: &mut core::str::Chars) -> Result<Self, DeJsonErr> {
+            let val = state.u64_range(u8::MAX as u64)?;
+            state.next_tok(input)?;
+            Ok(BitFlags8(val as u8))
+        }
+    }
+
+    impl DeBin for BitFlags8 {
+        fn de_bin(offset: &mut usize, bytes: &[u8]) -> Result<Self, DeBinErr> {
+            if *offset + 1 > bytes.len() {
+                return Err(DeBinErr {
+                    o: *offset,
+                    l: 1,
+                    s: bytes.len(),
+                });
+            }
+            let val = bytes[*offset];
+            *offset += 1;
+            Ok(BitFlags8(val))
+        }
+    }
+}
