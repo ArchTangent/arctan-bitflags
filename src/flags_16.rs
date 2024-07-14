@@ -32,7 +32,7 @@ impl BitFlags16 {
         self.0
     }
     /// Converts an index (0-15) into a `BitFlags16`.
-    /// 
+    ///
     /// __Panics__ if `index > 15`.
     pub fn from_index(index: usize) -> Self {
         Self::try_from(index).unwrap()
@@ -100,7 +100,7 @@ impl BitFlags16 {
         self.0 = self.0 | other.0;
     }
     /// Sets bit at given index (0-15).
-    /// 
+    ///
     /// __Panics__ if `index > 15`.
     #[inline]
     pub fn insert_at_index(&mut self, index: usize) {
@@ -117,7 +117,7 @@ impl BitFlags16 {
         }
     }
     /// Sets bit at given index (0-15) to specific value (`true` = `1`; `false` = `0`).
-    /// 
+    ///
     /// __Panics__ if `index > 15`.
     #[inline]
     pub fn set_at_index(&mut self, index: usize, value: bool) {
@@ -134,7 +134,7 @@ impl BitFlags16 {
         self.0 = self.0 ^ mask.0;
     }
     /// Toggles bit at given index (0-15).
-    /// 
+    ///
     /// __Panics__ if `index > 15`.
     #[inline]
     pub fn toggle_at_index(&mut self, index: usize) {
@@ -147,7 +147,7 @@ impl BitFlags16 {
         self.0 = self.0 & !other.0;
     }
     /// Unsets bit at given index (0-15).
-    /// 
+    ///
     /// __Panics__ if `index > 15`.
     #[inline]
     pub fn remove_at_index(&mut self, index: usize) {
@@ -337,5 +337,94 @@ impl core::iter::Iterator for BitFlagsIter16 {
             self.current_bit += 1;
         }
         None
+    }
+}
+
+//  #######   ########   ######   ########  #######
+//  ##    ##  ##        ##        ##        ##    ##
+//  ##    ##  ######     ######   ######    #######
+//  ##    ##  ##              ##  ##        ##   ##
+//  #######   ########  #######   ########  ##    ##
+
+#[cfg(feature = "serde-support")]
+mod impl_serde {
+    use super::BitFlags16;
+    use serde::{Deserialize, Serialize};
+
+    impl<'de> Deserialize<'de> for BitFlags16 {
+        fn deserialize<D: serde::Deserializer<'de>>(d: D) -> Result<BitFlags16, D::Error> {
+            let val = u16::deserialize(d)?;
+            Ok(BitFlags16(val))
+        }
+    }
+
+    impl Serialize for BitFlags16 {
+        fn serialize<S: serde::Serializer>(&self, s: S) -> Result<S::Ok, S::Error> {
+            u16::serialize(&self.0, s)
+        }
+    }
+}
+
+#[cfg(feature = "nanoserde-support")]
+mod impl_nanoserde {
+    extern crate std;
+    use super::BitFlags16;
+    use nanoserde::{
+        DeBin, DeBinErr, DeJson, DeJsonErr, DeJsonState, DeRon, DeRonErr, DeRonState, SerBin,
+        SerJson, SerJsonState, SerRon, SerRonState,
+    };
+    use std::prelude::v1::*;
+
+    impl DeBin for BitFlags16 {
+        fn de_bin(offset: &mut usize, bytes: &[u8]) -> Result<Self, DeBinErr> {
+            let l = core::mem::size_of::<u16>();
+            if *offset + l > bytes.len() {
+                return Err(DeBinErr { o: *offset, l: l, s: bytes.len() });
+            }
+            let val = u16::from_le_bytes(bytes[*offset..(*offset + l)].try_into().unwrap());
+            *offset += l;
+
+            Ok(BitFlags16(val))
+        }
+    }
+
+    impl SerBin for BitFlags16 {
+        fn ser_bin(&self, output: &mut Vec<u8>) {
+            let bytes = self.0.to_le_bytes();
+            output.extend_from_slice(&bytes);
+        }
+    }
+
+    impl DeJson for BitFlags16 {
+        fn de_json(
+            state: &mut DeJsonState,
+            input: &mut core::str::Chars,
+        ) -> Result<Self, DeJsonErr> {
+            let val = state.u64_range(u16::MAX as u64)?;
+            state.next_tok(input)?;
+
+            Ok(BitFlags16(val as u16))
+        }
+    }
+
+    impl SerJson for BitFlags16 {
+        fn ser_json(&self, _indent_level: usize, state: &mut SerJsonState) {
+            state.out.push_str(&self.0.to_string())
+        }
+    }
+
+    impl DeRon for BitFlags16 {
+        fn de_ron(state: &mut DeRonState, input: &mut core::str::Chars) -> Result<Self, DeRonErr> {
+            let val = state.u64_range(u16::MAX as u64)?;
+            state.next_tok(input)?;
+
+            Ok(BitFlags16(val as u16))
+        }
+    }
+
+    impl SerRon for BitFlags16 {
+        fn ser_ron(&self, _indent_level: usize, state: &mut SerRonState) {
+            state.out.push_str(&self.0.to_string())
+        }
     }
 }

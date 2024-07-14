@@ -32,7 +32,7 @@ impl BitFlags32 {
         self.0
     }
     /// Converts an index (0-31) into a `BitFlags32`.
-    /// 
+    ///
     /// __Panics__ if `index > 31`.
     #[inline]
     pub fn from_index(index: usize) -> Self {
@@ -101,7 +101,7 @@ impl BitFlags32 {
         self.0 = self.0 | other.0;
     }
     /// Sets bit at given index (0-31).
-    /// 
+    ///
     /// __Panics__ if `index > 31`.
     #[inline]
     pub fn insert_at_index(&mut self, index: usize) {
@@ -118,7 +118,7 @@ impl BitFlags32 {
         }
     }
     /// Sets bit at given index (0-31) to specific value (`true` = `1`; `false` = `0`).
-    /// 
+    ///
     /// __Panics__ if `index > 31`.
     #[inline]
     pub fn set_at_index(&mut self, index: usize, value: bool) {
@@ -135,7 +135,7 @@ impl BitFlags32 {
         self.0 = self.0 ^ mask.0;
     }
     /// Toggles bit at given index (0-31).
-    /// 
+    ///
     /// __Panics__ if `index > 31`.
     #[inline]
     pub fn toggle_at_index(&mut self, index: usize) {
@@ -148,7 +148,7 @@ impl BitFlags32 {
         self.0 = self.0 & !other.0;
     }
     /// Unsets bit at given index (0-31).
-    /// 
+    ///
     /// __Panics__ if `index > 31`.
     #[inline]
     pub fn remove_at_index(&mut self, index: usize) {
@@ -327,5 +327,94 @@ impl core::iter::Iterator for BitFlagsIter32 {
             self.current_bit += 1;
         }
         None
+    }
+}
+
+//  #######   ########   ######   ########  #######
+//  ##    ##  ##        ##        ##        ##    ##
+//  ##    ##  ######     ######   ######    #######
+//  ##    ##  ##              ##  ##        ##   ##
+//  #######   ########  #######   ########  ##    ##
+
+#[cfg(feature = "serde-support")]
+mod impl_serde {
+    use super::BitFlags32;
+    use serde::{Deserialize, Serialize};
+
+    impl<'de> Deserialize<'de> for BitFlags32 {
+        fn deserialize<D: serde::Deserializer<'de>>(d: D) -> Result<BitFlags32, D::Error> {
+            let val = u32::deserialize(d)?;
+            Ok(BitFlags32(val))
+        }
+    }
+
+    impl Serialize for BitFlags32 {
+        fn serialize<S: serde::Serializer>(&self, s: S) -> Result<S::Ok, S::Error> {
+            u32::serialize(&self.0, s)
+        }
+    }
+}
+
+#[cfg(feature = "nanoserde-support")]
+mod impl_nanoserde {
+    extern crate std;
+    use super::BitFlags32;
+    use nanoserde::{
+        DeBin, DeBinErr, DeJson, DeJsonErr, DeJsonState, DeRon, DeRonErr, DeRonState, SerBin,
+        SerJson, SerJsonState, SerRon, SerRonState,
+    };
+    use std::prelude::v1::*;
+
+    impl DeBin for BitFlags32 {
+        fn de_bin(offset: &mut usize, bytes: &[u8]) -> Result<Self, DeBinErr> {
+            let l = core::mem::size_of::<u32>();
+            if *offset + l > bytes.len() {
+                return Err(DeBinErr { o: *offset, l: l, s: bytes.len() });
+            }
+            let val = u32::from_le_bytes(bytes[*offset..(*offset + l)].try_into().unwrap());
+            *offset += l;
+
+            Ok(BitFlags32(val))
+        }
+    }
+
+    impl SerBin for BitFlags32 {
+        fn ser_bin(&self, output: &mut Vec<u8>) {
+            let bytes = self.0.to_le_bytes();
+            output.extend_from_slice(&bytes);
+        }
+    }
+
+    impl DeJson for BitFlags32 {
+        fn de_json(
+            state: &mut DeJsonState,
+            input: &mut core::str::Chars,
+        ) -> Result<Self, DeJsonErr> {
+            let val = state.u64_range(u32::MAX as u64)?;
+            state.next_tok(input)?;
+
+            Ok(BitFlags32(val as u32))
+        }
+    }
+
+    impl SerJson for BitFlags32 {
+        fn ser_json(&self, _indent_level: usize, state: &mut SerJsonState) {
+            state.out.push_str(&self.0.to_string())
+        }
+    }
+
+    impl DeRon for BitFlags32 {
+        fn de_ron(state: &mut DeRonState, input: &mut core::str::Chars) -> Result<Self, DeRonErr> {
+            let val = state.u64_range(u32::MAX as u64)?;
+            state.next_tok(input)?;
+
+            Ok(BitFlags32(val as u32))
+        }
+    }
+
+    impl SerRon for BitFlags32 {
+        fn ser_ron(&self, _indent_level: usize, state: &mut SerRonState) {
+            state.out.push_str(&self.0.to_string())
+        }
     }
 }

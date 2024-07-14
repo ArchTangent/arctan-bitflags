@@ -32,7 +32,7 @@ impl BitFlags8 {
         self.0
     }
     /// Converts an index (0-7) into a `BitFlags8`.
-    /// 
+    ///
     /// __Panics__ if `index > 7`.
     #[inline]
     pub fn from_index(index: usize) -> Self {
@@ -148,7 +148,7 @@ impl BitFlags8 {
         self.0 = self.0 & !other.0;
     }
     /// Unsets bit at given index (0-7).
-    /// 
+    ///
     /// __Panics__ if `index > 7`.
     #[inline]
     pub fn remove_at_index(&mut self, index: usize) {
@@ -350,16 +350,15 @@ impl core::iter::Iterator for BitFlagsIter8 {
 mod impl_serde {
     use super::BitFlags8;
     use serde::{Deserialize, Serialize};
-    
+
     impl<'de> Deserialize<'de> for BitFlags8 {
         fn deserialize<D: serde::Deserializer<'de>>(d: D) -> Result<BitFlags8, D::Error> {
             let val = u8::deserialize(d)?;
             Ok(BitFlags8(val))
         }
     }
-    
-    impl Serialize for BitFlags8
-    {
+
+    impl Serialize for BitFlags8 {
         fn serialize<S: serde::Serializer>(&self, s: S) -> Result<S::Ok, S::Error> {
             u8::serialize(&self.0, s)
         }
@@ -368,37 +367,63 @@ mod impl_serde {
 
 #[cfg(feature = "nanoserde-support")]
 mod impl_nanoserde {
+    extern crate std;
     use super::BitFlags8;
-    use nanoserde::{DeRon, DeRonErr, DeRonState, DeJson, DeJsonState, DeJsonErr, DeBin, DeBinErr};
+    use nanoserde::{
+        DeBin, DeBinErr, DeJson, DeJsonErr, DeJsonState, DeRon, DeRonErr, DeRonState, SerBin,
+        SerJson, SerJsonState, SerRon, SerRonState,
+    };
+    use std::prelude::v1::*;
+
+    impl DeBin for BitFlags8 {
+        fn de_bin(offset: &mut usize, bytes: &[u8]) -> Result<Self, DeBinErr> {
+            if *offset + 1 > bytes.len() {
+                return Err(DeBinErr { o: *offset, l: 1, s: bytes.len() });
+            }
+
+            let val = bytes[*offset];
+            *offset += 1;
+
+            Ok(BitFlags8(val))
+        }
+    }
+
+    impl SerBin for BitFlags8 {
+        fn ser_bin(&self, output: &mut Vec<u8>) {
+            output.push(self.0)
+        }
+    }
+
+    impl DeJson for BitFlags8 {
+        fn de_json(
+            state: &mut DeJsonState,
+            input: &mut core::str::Chars,
+        ) -> Result<Self, DeJsonErr> {
+            let val = state.u64_range(u8::MAX as u64)?;
+            state.next_tok(input)?;
+
+            Ok(BitFlags8(val as u8))
+        }
+    }
+
+    impl SerJson for BitFlags8 {
+        fn ser_json(&self, _indent_level: usize, state: &mut SerJsonState) {
+            state.out.push_str(&self.0.to_string())
+        }
+    }
 
     impl DeRon for BitFlags8 {
         fn de_ron(state: &mut DeRonState, input: &mut core::str::Chars) -> Result<Self, DeRonErr> {
             let val = state.u64_range(u8::MAX as u64)?;
             state.next_tok(input)?;
+
             Ok(BitFlags8(val as u8))
         }
     }
 
-    impl DeJson for BitFlags8 {
-        fn de_json(state: &mut DeJsonState, input: &mut core::str::Chars) -> Result<Self, DeJsonErr> {
-            let val = state.u64_range(u8::MAX as u64)?;
-            state.next_tok(input)?;
-            Ok(BitFlags8(val as u8))
-        }
-    }
-
-    impl DeBin for BitFlags8 {
-        fn de_bin(offset: &mut usize, bytes: &[u8]) -> Result<Self, DeBinErr> {
-            if *offset + 1 > bytes.len() {
-                return Err(DeBinErr {
-                    o: *offset,
-                    l: 1,
-                    s: bytes.len(),
-                });
-            }
-            let val = bytes[*offset];
-            *offset += 1;
-            Ok(BitFlags8(val))
+    impl SerRon for BitFlags8 {
+        fn ser_ron(&self, _indent_level: usize, state: &mut SerRonState) {
+            state.out.push_str(&self.0.to_string())
         }
     }
 }

@@ -342,3 +342,92 @@ impl core::iter::Iterator for BitFlagsIter64 {
         None
     }
 }
+
+//  #######   ########   ######   ########  #######
+//  ##    ##  ##        ##        ##        ##    ##
+//  ##    ##  ######     ######   ######    #######
+//  ##    ##  ##              ##  ##        ##   ##
+//  #######   ########  #######   ########  ##    ##
+
+#[cfg(feature = "serde-support")]
+mod impl_serde {
+    use super::BitFlags64;
+    use serde::{Deserialize, Serialize};
+
+    impl<'de> Deserialize<'de> for BitFlags64 {
+        fn deserialize<D: serde::Deserializer<'de>>(d: D) -> Result<BitFlags64, D::Error> {
+            let val = u64::deserialize(d)?;
+            Ok(BitFlags64(val))
+        }
+    }
+
+    impl Serialize for BitFlags64 {
+        fn serialize<S: serde::Serializer>(&self, s: S) -> Result<S::Ok, S::Error> {
+            u64::serialize(&self.0, s)
+        }
+    }
+}
+
+#[cfg(feature = "nanoserde-support")]
+mod impl_nanoserde {
+    extern crate std;
+    use super::BitFlags64;
+    use nanoserde::{
+        DeBin, DeBinErr, DeJson, DeJsonErr, DeJsonState, DeRon, DeRonErr, DeRonState, SerBin,
+        SerJson, SerJsonState, SerRon, SerRonState,
+    };
+    use std::prelude::v1::*;
+
+    impl DeBin for BitFlags64 {
+        fn de_bin(offset: &mut usize, bytes: &[u8]) -> Result<Self, DeBinErr> {
+            let l = core::mem::size_of::<u64>();
+            if *offset + l > bytes.len() {
+                return Err(DeBinErr { o: *offset, l: l, s: bytes.len() });
+            }
+            let val = u64::from_le_bytes(bytes[*offset..(*offset + l)].try_into().unwrap());
+            *offset += l;
+
+            Ok(BitFlags64(val))
+        }
+    }
+
+    impl SerBin for BitFlags64 {
+        fn ser_bin(&self, output: &mut Vec<u8>) {
+            let bytes = self.0.to_le_bytes();
+            output.extend_from_slice(&bytes);
+        }
+    }
+
+    impl DeJson for BitFlags64 {
+        fn de_json(
+            state: &mut DeJsonState,
+            input: &mut core::str::Chars,
+        ) -> Result<Self, DeJsonErr> {
+            let val = state.u64_range(u64::MAX as u64)?;
+            state.next_tok(input)?;
+
+            Ok(BitFlags64(val as u64))
+        }
+    }
+
+    impl SerJson for BitFlags64 {
+        fn ser_json(&self, _indent_level: usize, state: &mut SerJsonState) {
+            state.out.push_str(&self.0.to_string())
+        }
+    }
+
+    impl DeRon for BitFlags64 {
+        fn de_ron(state: &mut DeRonState, input: &mut core::str::Chars) -> Result<Self, DeRonErr> {
+            let val = state.u64_range(u64::MAX as u64)?;
+            state.next_tok(input)?;
+
+            Ok(BitFlags64(val as u64))
+        }
+    }
+
+    impl SerRon for BitFlags64 {
+        fn ser_ron(&self, _indent_level: usize, state: &mut SerRonState) {
+            state.out.push_str(&self.0.to_string())
+        }
+    }
+}
