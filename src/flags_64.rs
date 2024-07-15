@@ -32,7 +32,7 @@ impl BitFlags64 {
         self.0
     }
     /// Converts an index (0-63) into a `BitFlags64`.
-    /// 
+    ///
     /// __Panics__ if `index > 63`.
     #[inline]
     pub fn from_index(index: usize) -> Self {
@@ -101,7 +101,7 @@ impl BitFlags64 {
         self.0 = self.0 | other.0;
     }
     /// Sets flag at given index (0-63).
-    /// 
+    ///
     /// __Panics__ if `index > 63`.
     #[inline]
     pub fn insert_at_index(&mut self, index: usize) {
@@ -118,7 +118,7 @@ impl BitFlags64 {
         }
     }
     /// Sets bit at given index (0-63) to specific value (`true` = `1`; `false` = `0`).
-    /// 
+    ///
     /// __Panics__ if `index > 63`.
     #[inline]
     pub fn set_at_index(&mut self, index: usize, value: bool) {
@@ -135,7 +135,7 @@ impl BitFlags64 {
         self.0 = self.0 ^ mask.0;
     }
     /// Toggles bit at given index (0-63).
-    /// 
+    ///
     /// __Panics__ if `index > 63`.
     #[inline]
     pub fn toggle_at_index(&mut self, index: usize) {
@@ -148,7 +148,7 @@ impl BitFlags64 {
         self.0 = self.0 & !other.0;
     }
     /// Unsets bit at given index (0-63).
-    /// 
+    ///
     /// __Panics__ if `index > 63`.
     #[inline]
     pub fn remove_at_index(&mut self, index: usize) {
@@ -403,7 +403,7 @@ mod impl_nanoserde {
             state: &mut DeJsonState,
             input: &mut core::str::Chars,
         ) -> Result<Self, DeJsonErr> {
-            let val = state.u64_range(u64::MAX as u64)?;
+            let val = state.u64_range(u64::MAX)?;
             state.next_tok(input)?;
 
             Ok(BitFlags64(val as u64))
@@ -418,7 +418,7 @@ mod impl_nanoserde {
 
     impl DeRon for BitFlags64 {
         fn de_ron(state: &mut DeRonState, input: &mut core::str::Chars) -> Result<Self, DeRonErr> {
-            let val = state.u64_range(u64::MAX as u64)?;
+            let val = state.u64_range(u64::MAX)?;
             state.next_tok(input)?;
 
             Ok(BitFlags64(val as u64))

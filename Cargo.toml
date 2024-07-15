@@ -1,6 +1,6 @@
 [package]
 name = "arctan-bitflags"
-version = "1.0.0-alpha.1"
+version = "1.0.0-alpha.2"
 edition = "2021"
 authors = ["ArchTangent"]
 categories = ["bitflags", "no-std"]
@@ -13,16 +13,14 @@ nanoserde = { version = "~0.1",  optional = true }
 
 # Dependencies required for testing.
 [dev-dependencies]
-serde = { version = "~1.0" } 
+ron = { version = "~0.8", features = ["integer128"] }
+serde = { version = "~1.0" }
 serde_json = { version = "~1.0" }
-# arctan-bitflags = { path = ".", features = ["serde-support", "nanoserde-de", "nanoserde-ser"] }
 arctan-bitflags = { path = ".", features = ["serde-support", "nanoserde-support"] }
 
 # `serde-support`: for (de)serialization using `serde`.
-# `nanoserde-support`: for (de)serialization using `nanoserde`. Required `std` for serialization.
+# `nanoserde-support`: for (de)serialization using `nanoserde`. Requires `std`.
 [features]
 std = []
 serde-support = ["serde"]
 nanoserde-support = ["nanoserde", "std"]
-# nanoserde-de = ["nanoserde"]
-# nanoserde-ser = ["nanoserde", "std"]

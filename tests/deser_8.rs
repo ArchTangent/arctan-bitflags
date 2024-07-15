@@ -1,6 +1,8 @@
 //! (De)serialization Tests for the `BitFlags8` struct.
 //!
 //! The optional "serde-support" and "nanoserde-support" features are enabled for testing.
+//! 
+//! _Note_: `nanoserde` serializes RON with spaces while `serde`+`ron` does not.
 
 use arctan_bitflags::BitFlags8;
 use nanoserde::{DeBin, DeJson, DeRon, SerBin, SerJson, SerRon};
@@ -9,7 +11,9 @@ const FLAG_BIN: &[u8] = &[0, 1, 2, 3, 4, 8, 16, 32, 64, 128, 255];
 
 const FLAG_JSON: &str = "[0,1,2,3,4,8,16,32,64,128,255]";
 
-const FLAG_RON: &str = "(0, 1, 2, 3, 4, 8, 16, 32, 64, 128, 255)";
+const FLAG_RON: &str = "(0,1,2,3,4,8,16,32,64,128,255)";
+
+const FLAG_RON_NS: &str = "(0, 1, 2, 3, 4, 8, 16, 32, 64, 128, 255)";
 
 const FLAG_ARRAY: [BitFlags8; 11] = [
     BitFlags8(0),
@@ -27,17 +31,29 @@ const FLAG_ARRAY: [BitFlags8; 11] = [
 
 #[test]
 fn bitflags8_serde() {
-    // Serialize
+    // Serialize (JSON)
     let json_actual = serde_json::to_string(&FLAG_ARRAY).unwrap();
     let json_expected = FLAG_JSON;
 
     assert_eq!(json_actual, json_expected);
 
-    // Deserialize
+    // Deserialize (JSON)
     let array_actual: [BitFlags8; 11] = serde_json::from_str(&FLAG_JSON).unwrap();
     let array_expected = FLAG_ARRAY;
 
     assert_eq!(array_actual, array_expected);
+
+    // Serialize (RON)
+    let ron_actual = ron::to_string(&FLAG_ARRAY).unwrap();
+    let ron_expected = FLAG_RON;
+
+    assert_eq!(ron_actual, ron_expected);
+
+    // Deserialize (RON)
+    let array_actual: [BitFlags8; 11] = ron::from_str(&FLAG_RON).unwrap();
+    let array_expected = FLAG_ARRAY;
+
+    assert_eq!(array_actual, array_expected);    
 }
 
 #[test]
@@ -55,7 +71,7 @@ fn bitflags8_nanoserde_de() {
     assert_eq!(array_actual, array_expected);
 
     // Deserialize (RON)
-    let array_actual = <[BitFlags8; 11]>::deserialize_ron(&FLAG_RON).unwrap();
+    let array_actual = <[BitFlags8; 11]>::deserialize_ron(&FLAG_RON_NS).unwrap();
     let array_expected = FLAG_ARRAY;
 
     assert_eq!(array_actual, array_expected);
@@ -77,7 +93,7 @@ fn bitflags8_nanoserde_ser() {
 
     // Serialize (RON)
     let ron_actual = <[BitFlags8; 11]>::serialize_ron(&FLAG_ARRAY);
-    let ron_expected = FLAG_RON;
+    let ron_expected = FLAG_RON_NS;
 
     assert_eq!(ron_actual, ron_expected);
 }

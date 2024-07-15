@@ -1,4 +1,8 @@
 //! BitFlags with a `u128` representation.
+//!
+//! __NOTE__:
+//! - JSON and RON, (de)serialization of `BitFlags128` is _not_ supported for `nanoserde`.
+//! - BIN (de)serialization of `BitFlags128` is supported for both `serde` and `nanoserde`.
 
 use core::convert::TryFrom;
 
@@ -32,7 +36,7 @@ impl BitFlags128 {
         self.0
     }
     /// Converts an index (0-127) into a `BitFlags128`.
-    /// 
+    ///
     /// __Panics__ if `index > 127`.
     #[inline]
     pub fn from_index(index: usize) -> Self {
@@ -101,7 +105,7 @@ impl BitFlags128 {
         self.0 = self.0 | other.0;
     }
     /// Sets bit at given index (0-127).
-    /// 
+    ///
     /// __Panics__ if `index > 127`.
     #[inline]
     pub fn insert_at_index(&mut self, index: usize) {
@@ -118,7 +122,7 @@ impl BitFlags128 {
         }
     }
     /// Sets bit at given index (0-127) to specific value (`true` = `1`; `false` = `0`).
-    /// 
+    ///
     /// __Panics__ if `index > 127`.
     #[inline]
     pub fn set_at_index(&mut self, index: usize, value: bool) {
@@ -135,7 +139,7 @@ impl BitFlags128 {
         self.0 = self.0 ^ mask.0;
     }
     /// Toggles bit at given index (0-127).
-    /// 
+    ///
     /// __Panics__ if `index > 127`.
     #[inline]
     pub fn toggle_at_index(&mut self, index: usize) {
@@ -148,7 +152,7 @@ impl BitFlags128 {
         self.0 = self.0 & !other.0;
     }
     /// Unsets bit at given index (0-127). Indexes 0-127 allowed.
-    /// 
+    ///
     /// __Panics__ if `index > 127`.
     #[inline]
     pub fn remove_at_index(&mut self, index: usize) {
@@ -341,5 +345,58 @@ impl core::iter::Iterator for BitFlagsIter128 {
             self.current_bit += 1;
         }
         None
+    }
+}
+
+//  #######   ########   ######   ########  #######
+//  ##    ##  ##        ##        ##        ##    ##
+//  ##    ##  ######     ######   ######    #######
+//  ##    ##  ##              ##  ##        ##   ##
+//  #######   ########  #######   ########  ##    ##
+
+#[cfg(feature = "serde-support")]
+mod impl_serde {
+    use super::BitFlags128;
+    use serde::{Deserialize, Serialize};
+
+    impl<'de> Deserialize<'de> for BitFlags128 {
+        fn deserialize<D: serde::Deserializer<'de>>(d: D) -> Result<BitFlags128, D::Error> {
+            let val = u128::deserialize(d)?;
+            Ok(BitFlags128(val))
+        }
+    }
+
+    impl Serialize for BitFlags128 {
+        fn serialize<S: serde::Serializer>(&self, s: S) -> Result<S::Ok, S::Error> {
+            u128::serialize(&self.0, s)
+        }
+    }
+}
+
+#[cfg(feature = "nanoserde-support")]
+mod impl_nanoserde {
+    extern crate std;
+    use super::BitFlags128;
+    use nanoserde::{DeBin, DeBinErr, SerBin};
+    use std::prelude::v1::*;
+
+    impl DeBin for BitFlags128 {
+        fn de_bin(offset: &mut usize, bytes: &[u8]) -> Result<Self, DeBinErr> {
+            let l = core::mem::size_of::<u128>();
+            if *offset + l > bytes.len() {
+                return Err(DeBinErr { o: *offset, l: l, s: bytes.len() });
+            }
+            let val = u128::from_le_bytes(bytes[*offset..(*offset + l)].try_into().unwrap());
+            *offset += l;
+
+            Ok(BitFlags128(val))
+        }
+    }
+
+    impl SerBin for BitFlags128 {
+        fn ser_bin(&self, output: &mut Vec<u8>) {
+            let bytes = self.0.to_le_bytes();
+            output.extend_from_slice(&bytes);
+        }
     }
 }

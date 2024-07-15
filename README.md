@@ -9,6 +9,22 @@ Bitflag structures with 8, 16, 32, 64, and 128-bit representation.
 - `BitFlags64`:  64-bit flags that convert to and from `u64`.
 - `BitFlags128`: 128-bit flags that convert to and from `u128`.
 
+## Features
+
+### `serde-support`
+
+Optional. Requires `serde`.
+
+For RON, (de)serializing `BitFlags128` requires the `ron` crate's `"integer128"` feature.
+
+### `nanoserde-support`
+
+Optional. Requires `nanoserde` and `std`.
+
+For JSON and RON, (de)serialization of up to 64-bit values (`BitFlags64`) is supported.
+
+For BIN, (de)serialization of 128-bit values (`BitFlags128`) is supported.
+
 ## Usage
 
 ### Creation
