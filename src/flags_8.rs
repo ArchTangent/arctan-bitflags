@@ -11,7 +11,7 @@ impl BitFlags8 {
     pub fn new() -> Self {
         Self::empty()
     }
-    /// Returns a new instance with all bits set to `0`.
+    /// Returns a new  with all bits set to `0`.
     #[inline]
     pub fn empty() -> Self {
         Self(0)
@@ -26,7 +26,7 @@ impl BitFlags8 {
     pub fn from_u8(val: u8) -> Self {
         Self(val)
     }
-    /// Returns the underlying `u8` value.
+    /// Returns the underlying `instanceu8` value.
     #[inline]
     pub fn to_u8(&self) -> u8 {
         self.0
@@ -67,27 +67,27 @@ impl BitFlags8 {
     }
     /// Returns the bitwise `AND` (`&`) of two flags.
     #[inline]
-    pub fn intersection(&self, other: Self) -> BitFlags8 {
+    pub fn intersection(&self, other: Self) -> Self {
         BitFlags8(self.0 & other.0)
     }
     /// Returns the bits set in `self` that are _not_ set in `other`.
     #[inline]
-    pub fn difference(&self, other: Self) -> BitFlags8 {
+    pub fn difference(&self, other: Self) -> Self {
         BitFlags8(self.0 & !other.0)
     }
     /// Returns the bits set in `self` or `other`, but _not_ both, using bitwise `XOR` (`^`).
     #[inline]
-    pub fn symmetric_difference(&self, other: Self) -> BitFlags8 {
+    pub fn symmetric_difference(&self, other: Self) -> Self {
         BitFlags8(self.0 ^ other.0)
     }
     /// Returns the bitwise `OR` (`|`) of two flags.
     #[inline]
-    pub fn union(&self, other: Self) -> BitFlags8 {
+    pub fn union(&self, other: Self) -> Self {
         BitFlags8(self.0 | other.0)
     }
     /// Returns the bitwise negation (`!`) of given flags.
     #[inline]
-    pub fn complement(&self) -> BitFlags8 {
+    pub fn complement(&self) -> Self {
         BitFlags8(!self.0)
     }
     /// Returns `true` if current flags contain _all_ incoming flags.
@@ -155,11 +155,6 @@ impl BitFlags8 {
         assert!(index < 8, "BitFlags8 structs are indexed from 0 to 7");
         self.0 = self.0 & !2_u8.pow(index as u32);
     }
-    /// Returns the bits (internal value).
-    #[inline]
-    pub fn bits(&self) -> u8 {
-        self.0
-    }
     /// Returns the number of bits.
     #[inline]
     pub fn num_bits() -> usize {
@@ -182,14 +177,15 @@ impl BitFlags8 {
         }
         None
     }
-    /// Returns the value of the highest set bit of the bitflag. If `None` -> `0`.
+    /// Returns the value of the highest set bit. If none, returns empty flags.
     #[inline]
-    pub fn highest_set_bit(&self) -> u8 {
+    pub fn highest_set_bit(&self) -> Self {
         let mut n = self.0.clone();
         n |= n >> 1;
         n |= n >> 2;
         n |= n >> 4;
-        n - (n >> 1)
+        n -= n >> 1;
+        BitFlags8(n)
     }
     /// Returns the index of highest set bit of the bitflag, if present.
     #[inline]
@@ -215,7 +211,7 @@ impl BitFlags8 {
     /// Iterates over set bits of the structure. Returns `Some(bit_index)` if the
     /// bit is set, otherwise `None`.
     ///
-    /// E.g. collecting `0b00001001` into a vector would produce `vec![0, 3]`,
+    /// E.g. collecting `0b00001001` into a vector would produce `vec![0, 3]`, 
     /// representing the 0th and 3rd indexes.
     #[inline]
     pub fn iter(&self) -> BitFlagsIter8 {
@@ -224,7 +220,7 @@ impl BitFlags8 {
 }
 
 impl From<u8> for BitFlags8 {
-    fn from(value: u8) -> BitFlags8 {
+    fn from(value: u8) -> Self {
         BitFlags8(value)
     }
 }

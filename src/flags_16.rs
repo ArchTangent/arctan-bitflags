@@ -66,27 +66,27 @@ impl BitFlags16 {
     }
     /// Returns the bitwise `AND` (`&`) of two flags.
     #[inline]
-    pub fn intersection(&self, other: Self) -> BitFlags16 {
+    pub fn intersection(&self, other: Self) -> Self {
         BitFlags16(self.0 & other.0)
     }
     /// Returns the bits set in `self` that are _not_ set in `other`.
     #[inline]
-    pub fn difference(&self, other: Self) -> BitFlags16 {
+    pub fn difference(&self, other: Self) -> Self {
         BitFlags16(self.0 & !other.0)
     }
     /// Returns the bits set in `self` or `other`, but _not_ both, using bitwise `XOR` (`^`).
     #[inline]
-    pub fn symmetric_difference(&self, other: Self) -> BitFlags16 {
+    pub fn symmetric_difference(&self, other: Self) -> Self {
         BitFlags16(self.0 ^ other.0)
     }
     /// Returns the bitwise `OR` (`|`) of two flags.
     #[inline]
-    pub fn union(&self, other: Self) -> BitFlags16 {
+    pub fn union(&self, other: Self) -> Self {
         BitFlags16(self.0 | other.0)
     }
     /// Returns the bitwise negation (`!`) of given flags.
     #[inline]
-    pub fn complement(&self) -> BitFlags16 {
+    pub fn complement(&self) -> Self {
         BitFlags16(!self.0)
     }
     /// Returns `true` if current flags contain _all_ incoming flags.
@@ -154,11 +154,6 @@ impl BitFlags16 {
         assert!(index < 16, "BitFlags16 structs are indexed from 0 to 15");
         self.0 = self.0 & !2_u16.pow(index as u32);
     }
-    /// Returns the bits (internal value).
-    #[inline]
-    pub fn bits(&self) -> u16 {
-        self.0
-    }
     /// Returns the number of bits.
     #[inline]
     pub fn num_bits() -> usize {
@@ -181,15 +176,16 @@ impl BitFlags16 {
         }
         None
     }
-    /// Returns the value of the highest set bit of the bitflag. If `None` -> `0`.
+    /// Returns the value of the highest set bit. If none, returns empty flags.
     #[inline]
-    pub fn highest_set_bit(&self) -> u16 {
+    pub fn highest_set_bit(&self) -> Self {
         let mut n = self.0.clone();
         n |= n >> 1;
         n |= n >> 2;
         n |= n >> 4;
         n |= n >> 8;
-        n - (n >> 1)
+        n -= n >> 1;
+        BitFlags16(n)
     }
     /// Returns the index of the highest set bit of the bitflag, if present.
     #[inline]

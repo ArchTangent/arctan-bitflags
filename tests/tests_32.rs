@@ -3,18 +3,61 @@
 use arctan_bitflags::BitFlags32;
 
 #[test]
+fn bitflags32_contains() {
+    let f1 = BitFlags32(0b0000);
+    let f2 = BitFlags32(0b0001);
+    let f3 = BitFlags32(0b1001);
+
+    assert!(!f1.contains(f2));
+    assert!(!f1.contains(f3));
+    assert!(!f2.contains(f3));
+    assert!(f3.contains(f2));
+    assert!(f3.contains(f1));
+    assert!(f2.contains(f1));
+}
+
+#[test]
+fn bitflags32_count_ones() {
+    let v0 = BitFlags32(0b00000000);
+    let v1 = BitFlags32(0b01000000);
+    let v2 = BitFlags32(0b00100001);
+    let v3 = BitFlags32(0b00011001);
+    let v4 = BitFlags32(0b10101001);
+    let v5 = BitFlags32(0b10111001);
+
+    assert_eq!(v0.count_ones(), 0);
+    assert_eq!(v1.count_ones(), 1);
+    assert_eq!(v2.count_ones(), 2);
+    assert_eq!(v3.count_ones(), 3);
+    assert_eq!(v4.count_ones(), 4);
+    assert_eq!(v5.count_ones(), 5);
+}
+
+#[test]
 fn bitflags32_creation() {
     let f1a = BitFlags32::new();
     let f1b = BitFlags32(0);
     let f1c = BitFlags32::from(0);
     let f1d: BitFlags32 = 0.into();
+    let f1e = BitFlags32(0b0010);
+    let f1f = BitFlags32::from_index(1);
     assert_eq!(f1a, f1b);
     assert_eq!(f1b, f1c);
     assert_eq!(f1c, f1d);
+    assert_eq!(f1e, f1f);
 
     let f2a = BitFlags32::from_slice(&[2, 4, 5]);
     let f2b = BitFlags32::from_u32(0b0011_0100);
     assert_eq!(f2a, f2b);
+}
+
+#[test]
+fn bitflags32_empty_full() {
+    let f1 = BitFlags32::empty();
+    let f2 = BitFlags32::full();
+
+    assert!(f1.is_empty());
+    assert!(f2.is_full());
 }
 
 #[test]
@@ -71,70 +114,16 @@ fn bitflags32_ops_assign() {
 }
 
 #[test]
-fn bitflags32_general() {
-    let v0 = BitFlags32(0b00000000);
-    let v1 = BitFlags32(0b00000100);
-    let va = BitFlags32(u32::MAX);
+fn bitflags32_get_index() {
+    let f1 = BitFlags32::full();
 
-    assert!(v0.is_empty());
-    assert!(va.is_full());
-    assert!(BitFlags32(0b00000010).intersects(BitFlags32(0b00000111)));
-    assert!(!BitFlags32(0b00000010).intersects(BitFlags32(0b00100000)));
-    assert!(BitFlags32(0b00000111).contains(BitFlags32(0b00000011)));
-    assert!(!BitFlags32(0b00000111).contains(BitFlags32(0b00100011)));
-    assert_eq!(BitFlags32(0b00000010), BitFlags32::from_index(1));
-    assert_eq!(v1.bit_at_index(2), true);
-    assert_eq!(v1.bit_at_index(3), false);
-    assert_eq!(v1.get_bit_at_index(2), Some(true));
-    assert_eq!(v1.get_bit_at_index(3), Some(false));
-    assert_eq!(v1.get_bit_at_index(32), None);
-}
+    let ix_first = f1.get_bit_at_index(0);
+    let ix_last = f1.get_bit_at_index(31);
+    let ix_oob = f1.get_bit_at_index(32);
 
-#[test]
-fn bitflags32_intersection() {
-    let f1 = BitFlags32(0b0000);
-    let f2 = BitFlags32(0b0001);
-    let f3 = BitFlags32(0b1001);
-
-    assert_eq!(f1.intersection(f2), BitFlags32(0b0000));
-    assert_eq!(f1.intersection(f3), BitFlags32(0b0000));
-    assert_eq!(f2.intersection(f3), BitFlags32(0b0001));
-}
-
-#[test]
-fn bitflags32_difference() {
-    let f1 = BitFlags32(0b0000);
-    let f2 = BitFlags32(0b0001);
-    let f3 = BitFlags32(0b1001);
-
-    assert_eq!(f1.difference(f2), BitFlags32(0b0000));
-    assert_eq!(f1.difference(f3), BitFlags32(0b0000));
-    assert_eq!(f2.difference(f3), BitFlags32(0b0000));
-    assert_eq!(f3.difference(f2), BitFlags32(0b1000));
-    assert_eq!(f3.difference(f1), BitFlags32(0b1001));
-    assert_eq!(f2.difference(f1), BitFlags32(0b0001));
-}
-
-#[test]
-fn bitflags32_symmetric_difference() {
-    let f1 = BitFlags32(0b0000);
-    let f2 = BitFlags32(0b0001);
-    let f3 = BitFlags32(0b1001);
-
-    assert_eq!(f1.symmetric_difference(f2), BitFlags32(0b0001));
-    assert_eq!(f1.symmetric_difference(f3), BitFlags32(0b1001));
-    assert_eq!(f2.symmetric_difference(f3), BitFlags32(0b1000));
-}
-
-#[test]
-fn bitflags32_union() {
-    let f1 = BitFlags32(0b0000);
-    let f2 = BitFlags32(0b0001);
-    let f3 = BitFlags32(0b1001);
-
-    assert_eq!(f1.union(f2), BitFlags32(0b0001));
-    assert_eq!(f1.union(f3), BitFlags32(0b1001));
-    assert_eq!(f2.union(f3), BitFlags32(0b1001));
+    assert_eq!(ix_first, Some(true));
+    assert_eq!(ix_last, Some(true));
+    assert_eq!(ix_oob, None);
 }
 
 #[test]
@@ -152,7 +141,19 @@ fn bitflags32_highest_set_bit() {
         BitFlags32(64),
     ];
 
-    let expected = vec![0, 1, 2, 2, 4, 4, 8, 16, 32, 64];
+    let expected = vec![
+        BitFlags32(0),
+        BitFlags32(1),
+        BitFlags32(2),
+        BitFlags32(2),
+        BitFlags32(4),
+        BitFlags32(4),
+        BitFlags32(8),
+        BitFlags32(16),
+        BitFlags32(32),
+        BitFlags32(64),
+    ];
+
     let returned = values.iter().map(|f| f.highest_set_bit()).collect::<Vec<_>>();
 
     assert_eq!(expected, returned)
@@ -187,23 +188,6 @@ fn bitflags32_highest_set_bit_ix() {
     let returned = values.iter().map(|f| f.highest_set_bit_index()).collect::<Vec<_>>();
 
     assert_eq!(expected, returned)
-}
-
-#[test]
-fn bitflags32_count_ones() {
-    let v0 = BitFlags32(0b00000000);
-    let v1 = BitFlags32(0b01000000);
-    let v2 = BitFlags32(0b00100001);
-    let v3 = BitFlags32(0b00011001);
-    let v4 = BitFlags32(0b10101001);
-    let v5 = BitFlags32(0b10111001);
-
-    assert_eq!(v0.count_ones(), 0);
-    assert_eq!(v1.count_ones(), 1);
-    assert_eq!(v2.count_ones(), 2);
-    assert_eq!(v3.count_ones(), 3);
-    assert_eq!(v4.count_ones(), 4);
-    assert_eq!(v5.count_ones(), 5);
 }
 
 #[test]
@@ -244,6 +228,78 @@ fn bitflags32_insert_at_index() {
     assert_eq!(v3, BitFlags32(0b00001000));
     assert_eq!(va, BitFlags32(0b11111111));
 }
+
+#[test]
+fn bitflags32_index() {
+    let f1 = BitFlags32(0b10000000);
+
+    let ix_0 = f1.bit_at_index(0);
+    let ix_7 = f1.bit_at_index(7);
+
+    assert_eq!(ix_0, false);
+    assert_eq!(ix_7, true);
+}
+
+#[test]
+#[should_panic]
+fn bitflags32_index_oob() {
+    let f1 = BitFlags32(0b10000000);
+
+    f1.bit_at_index(32);
+}
+
+#[test]
+fn bitflags32_intersection() {
+    let f1 = BitFlags32(0b0000);
+    let f2 = BitFlags32(0b0001);
+    let f3 = BitFlags32(0b1001);
+
+    assert_eq!(f1.intersection(f2), BitFlags32(0b0000));
+    assert_eq!(f1.intersection(f3), BitFlags32(0b0000));
+    assert_eq!(f2.intersection(f3), BitFlags32(0b0001));
+
+    assert!(!f1.intersects(f2));
+    assert!(!f1.intersects(f3));
+    assert!(f2.intersects(f3));
+}
+
+#[test]
+fn bitflags32_difference() {
+    let f1 = BitFlags32(0b0000);
+    let f2 = BitFlags32(0b0001);
+    let f3 = BitFlags32(0b1001);
+
+    assert_eq!(f1.difference(f2), BitFlags32(0b0000));
+    assert_eq!(f1.difference(f3), BitFlags32(0b0000));
+    assert_eq!(f2.difference(f3), BitFlags32(0b0000));
+    assert_eq!(f3.difference(f2), BitFlags32(0b1000));
+    assert_eq!(f3.difference(f1), BitFlags32(0b1001));
+    assert_eq!(f2.difference(f1), BitFlags32(0b0001));
+}
+
+#[test]
+fn bitflags32_symmetric_difference() {
+    let f1 = BitFlags32(0b0000);
+    let f2 = BitFlags32(0b0001);
+    let f3 = BitFlags32(0b1001);
+
+    assert_eq!(f1.symmetric_difference(f2), BitFlags32(0b0001));
+    assert_eq!(f1.symmetric_difference(f3), BitFlags32(0b1001));
+    assert_eq!(f2.symmetric_difference(f3), BitFlags32(0b1000));
+}
+
+#[test]
+fn bitflags32_union() {
+    let f1 = BitFlags32(0b0000);
+    let f2 = BitFlags32(0b0001);
+    let f3 = BitFlags32(0b1001);
+
+    assert_eq!(f1.union(f2), BitFlags32(0b0001));
+    assert_eq!(f1.union(f3), BitFlags32(0b1001));
+    assert_eq!(f2.union(f3), BitFlags32(0b1001));
+}
+
+
 
 #[test]
 fn bitflags32_remove_at_index() {

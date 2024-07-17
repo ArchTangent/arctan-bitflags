@@ -62,42 +62,42 @@ impl BitFlags64 {
     }
     /// Returns `true` if `self` and `other` have _at least one_ matching set bit.
     #[inline]
-    pub fn intersects(&self, other: BitFlags64) -> bool {
+    pub fn intersects(&self, other: Self) -> bool {
         (self.0 & other.0) > 0
     }
     /// Returns the bitwise `AND` (`&`) of two flags.
     #[inline]
-    pub fn intersection(&self, other: Self) -> BitFlags64 {
+    pub fn intersection(&self, other: Self) -> Self {
         BitFlags64(self.0 & other.0)
     }
     /// Returns the bits set in `self` that are _not_ set in `other`.
     #[inline]
-    pub fn difference(&self, other: Self) -> BitFlags64 {
+    pub fn difference(&self, other: Self) -> Self {
         BitFlags64(self.0 & !other.0)
     }
     /// Returns the bits set in `self` or `other`, but _not_ both, using bitwise `XOR` (`^`).
     #[inline]
-    pub fn symmetric_difference(&self, other: Self) -> BitFlags64 {
+    pub fn symmetric_difference(&self, other: Self) -> Self {
         BitFlags64(self.0 ^ other.0)
     }
     /// Returns the bitwise `OR` (`|`) of two flags.
     #[inline]
-    pub fn union(&self, other: Self) -> BitFlags64 {
+    pub fn union(&self, other: Self) -> Self {
         BitFlags64(self.0 | other.0)
     }
     /// Returns the bitwise negation (`!`) of given flags.
     #[inline]
-    pub fn complement(&self) -> BitFlags64 {
+    pub fn complement(&self) -> Self {
         BitFlags64(!self.0)
     }
     /// Returns `true` if current flags contain _all_ incoming flags.
     #[inline]
-    pub fn contains(&self, other: BitFlags64) -> bool {
+    pub fn contains(&self, other: Self) -> bool {
         (self.0 & other.0) == other.0
     }
     /// Inserts `other` flags into current flags using bitwise `OR` (`|`).
     #[inline]
-    pub fn insert(&mut self, other: BitFlags64) {
+    pub fn insert(&mut self, other: Self) {
         self.0 = self.0 | other.0;
     }
     /// Sets flag at given index (0-63).
@@ -144,7 +144,7 @@ impl BitFlags64 {
     }
     /// Unsets bits that match those of incoming `BitFlags64` (bitwise `AND NOT`).
     #[inline]
-    pub fn remove(&mut self, other: BitFlags64) {
+    pub fn remove(&mut self, other: Self) {
         self.0 = self.0 & !other.0;
     }
     /// Unsets bit at given index (0-63).
@@ -154,11 +154,6 @@ impl BitFlags64 {
     pub fn remove_at_index(&mut self, index: usize) {
         assert!(index < 64, "BitFlags64 structs are indexed from 0 to 63");
         self.0 = self.0 & !2_u64.pow(index as u32);
-    }
-    /// Returns the bits (internal value).
-    #[inline]
-    pub fn bits(&self) -> u64 {
-        self.0
     }
     /// Returns the number of bits.
     #[inline]
@@ -182,9 +177,9 @@ impl BitFlags64 {
         }
         None
     }
-    /// Returns the value of the highest set bit of the bitflag. If `None` -> `0`.
+    /// Returns the value of the highest set bit. If none, returns empty flags.
     #[inline]
-    pub fn highest_set_bit(&self) -> u64 {
+    pub fn highest_set_bit(&self) -> Self {
         let mut n = self.0.clone();
         n |= n >> 1;
         n |= n >> 2;
@@ -192,7 +187,8 @@ impl BitFlags64 {
         n |= n >> 8;
         n |= n >> 16;
         n |= n >> 32;
-        n - (n >> 1)
+        n -= n >> 1;
+        BitFlags64(n)
     }
     /// Returns the index of the highest set bit of the bitflag, if present.
     #[inline]
@@ -227,7 +223,7 @@ impl BitFlags64 {
 }
 
 impl From<u64> for BitFlags64 {
-    fn from(value: u64) -> BitFlags64 {
+    fn from(value: u64) -> Self {
         BitFlags64(value)
     }
 }
