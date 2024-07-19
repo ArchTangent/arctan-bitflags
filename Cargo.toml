@@ -1,6 +1,6 @@
 [package]
 name = "arctan-bitflags"
-version = "1.0.0-alpha.3"
+version = "1.0.0-alpha.4"
 edition = "2021"
 authors = ["ArchTangent"]
 categories = ["bitflags", "no-std"]

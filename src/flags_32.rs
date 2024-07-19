@@ -3,7 +3,7 @@
 use core::convert::TryFrom;
 
 /// 32-bit bitflags, indexed from bit indexes `[0]` to `[31]`.
-#[derive(Debug, Default, Clone, Copy, Hash, PartialEq, Eq)]
+#[derive(Debug, Default, Clone, Copy, Hash, PartialEq, Eq, PartialOrd, Ord)]
 pub struct BitFlags32(pub u32);
 
 impl BitFlags32 {

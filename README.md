@@ -9,23 +9,34 @@ Bitflag structures with 8, 16, 32, 64, and 128-bit representation.
 - `BitFlags64`:  64-bit flags that convert to and from `u64`.
 - `BitFlags128`: 128-bit flags that convert to and from `u128`.
 
-## Features
+## Usage
 
-### `serde-support`
+### `Cargo.toml`
 
-Optional. Requires `serde`.
+```toml
+[dependencies]
+arctan-bitflags = { version = "1.0" }
+```
+
+With `serde-support` feature (requires `serde`):
+
+```toml
+[dependencies]
+arctan-bitflags = { version = "1.0", features = ["serde-support"] }
+```
 
 For RON, (de)serializing `BitFlags128` requires the `ron` crate's `"integer128"` feature.
 
-### `nanoserde-support`
+With `nanoserde-support` feature (requires `nanoserde` and `std`):
 
-Optional. Requires `nanoserde` and `std`.
+```toml
+[dependencies]
+arctan-bitflags = { version = "1.0", features = ["nanoserde-support"] }
+```
 
 For JSON and RON, (de)serialization of up to 64-bit values (`BitFlags64`) is supported.
 
 For BIN, (de)serialization of 128-bit values (`BitFlags128`) is supported.
-
-## Usage
 
 ### Creation
 
@@ -119,9 +130,7 @@ The primary purpose for creation of this library is for *games*. I wanted a bitf
 
 3. Intuitive: exposes an interface one would reasonably expect bitflags to have.
 
-4. Iteration: ability to iterate over set bits by their bit index.
-
-5. Works with lists of external `String`s: use auxillary structs to map `String` keys to `BitFlag` values. This is useful for making custom `enum`-like objects from external data.
+4. Iterable: ability to iterate over set bits by their bit index.
 
 ## Credit and Inspirations
 

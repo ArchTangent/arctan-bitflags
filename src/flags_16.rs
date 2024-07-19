@@ -3,7 +3,7 @@
 use core::convert::TryFrom;
 
 /// 16-bit bitflags, indexed from bit indexes `[0]` to `[15]`.
-#[derive(Debug, Default, Clone, Copy, Hash, PartialEq, Eq)]
+#[derive(Debug, Default, Clone, Copy, Hash, PartialEq, Eq, PartialOrd, Ord)]
 pub struct BitFlags16(pub u16);
 
 impl BitFlags16 {

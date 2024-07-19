@@ -3,7 +3,7 @@
 use core::convert::TryFrom;
 
 /// 64-bit bitflags, indexed from bit indexes `[0]` to `[63]`.
-#[derive(Debug, Default, Clone, Copy, Hash, PartialEq, Eq)]
+#[derive(Debug, Default, Clone, Copy, Hash, PartialEq, Eq, PartialOrd, Ord)]
 pub struct BitFlags64(pub u64);
 
 impl BitFlags64 {

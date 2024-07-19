@@ -1,13 +1,13 @@
 //! BitFlags with a `u128` representation.
 //!
 //! __NOTE__:
-//! - JSON and RON, (de)serialization of `BitFlags128` is _not_ supported for `nanoserde`.
+//! - JSON and RON (de)serialization of `BitFlags128` is _not_ supported for `nanoserde`.
 //! - BIN (de)serialization of `BitFlags128` is supported for both `serde` and `nanoserde`.
 
 use core::convert::TryFrom;
 
 /// 128-bit bitflags, indexed from bit indexes `[0]` to `[127]`.
-#[derive(Debug, Default, Clone, Copy, Hash, PartialEq, Eq)]
+#[derive(Debug, Default, Clone, Copy, Hash, PartialEq, Eq, PartialOrd, Ord)]
 pub struct BitFlags128(pub u128);
 
 impl BitFlags128 {

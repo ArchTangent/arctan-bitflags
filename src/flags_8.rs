@@ -3,7 +3,7 @@
 use core::convert::TryFrom;
 
 /// 8-bit bitflags, indexed from bit indexes `[0]` to `[7]`.
-#[derive(Debug, Default, Clone, Copy, Hash, PartialEq, Eq)]
+#[derive(Debug, Default, Clone, Copy, Hash, PartialEq, Eq, PartialOrd, Ord)]
 pub struct BitFlags8(pub u8);
 
 impl BitFlags8 {
