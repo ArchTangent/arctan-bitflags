@@ -21,6 +21,17 @@ impl BitFlags16 {
     pub fn full() -> Self {
         Self(u16::MAX)
     }
+    /// Returns a new instance with the first `n` (1-16) bits set. 
+    ///
+    /// __Panics__ if `n < 1` or `n > 16`.
+    #[inline]
+    pub fn with_first_n_set(n: u8) -> Self {
+        assert!(n > 0 && n < 17, "Value must be from 1 to 16");
+        
+        let v = 1 << n - 1;       
+        
+        BitFlags16(v | (v-1))
+    } 
     /// Returns a new instance from a `u16`.
     #[inline]
     pub fn from_u16(val: u16) -> Self {

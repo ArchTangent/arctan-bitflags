@@ -25,6 +25,17 @@ impl BitFlags128 {
     pub fn full() -> Self {
         Self(u128::MAX)
     }
+    /// Returns a new instance with the first `n` (1-128) bits set. 
+    ///
+    /// __Panics__ if `n < 1` or `n > 128`.
+    #[inline]
+    pub fn with_first_n_set(n: u8) -> Self {
+        assert!(n > 0 && n < 129, "Value must be from 1 to 128");
+        
+        let v = 1 << n - 1;       
+        
+        BitFlags128(v | (v-1))
+    }    
     /// Returns a new instance from a `u128`.
     #[inline]
     pub fn from_u128(val: u128) -> Self {

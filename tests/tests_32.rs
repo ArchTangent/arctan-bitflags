@@ -436,3 +436,30 @@ fn bitflags32_toggle_at_index() {
     assert_eq!(v3, BitFlags32(0b00000000));
     assert_eq!(va, BitFlags32(0b11111111));
 }
+
+#[test]
+fn bitflags32_with_first_n_set() {
+    let suite: [u8; 5] = [
+        1,
+        2,
+        4,    
+        7,
+        32,
+    ];
+    let expected = [
+        BitFlags32(0b0000_0001),
+        BitFlags32(0b0000_0011),
+        BitFlags32(0b0000_1111),
+        BitFlags32(0b0111_1111),
+        BitFlags32::full(),
+    ];
+    let actual = [
+        BitFlags32::with_first_n_set(suite[0]),
+        BitFlags32::with_first_n_set(suite[1]),
+        BitFlags32::with_first_n_set(suite[2]),
+        BitFlags32::with_first_n_set(suite[3]),
+        BitFlags32::with_first_n_set(suite[4]),
+    ];
+
+    assert_eq!(actual, expected);
+}

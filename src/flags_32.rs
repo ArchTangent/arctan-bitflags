@@ -21,6 +21,17 @@ impl BitFlags32 {
     pub fn full() -> Self {
         Self(u32::MAX)
     }
+    /// Returns a new instance with the first `n` (1-32) bits set. 
+    ///
+    /// __Panics__ if `n < 1` or `n > 32`.
+    #[inline]
+    pub fn with_first_n_set(n: u8) -> Self {
+        assert!(n > 0 && n < 33, "Value must be from 1 to 32");
+        
+        let v = 1 << n - 1;       
+        
+        BitFlags32(v | (v-1))
+    }     
     /// Returns a new instance from a `u32`.
     #[inline]
     pub fn from_u32(val: u32) -> Self {

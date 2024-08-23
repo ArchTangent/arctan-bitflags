@@ -11,7 +11,7 @@ impl BitFlags8 {
     pub fn new() -> Self {
         Self::empty()
     }
-    /// Returns a new  with all bits set to `0`.
+    /// Returns a new instance with all bits set to `0`.
     #[inline]
     pub fn empty() -> Self {
         Self(0)
@@ -21,6 +21,17 @@ impl BitFlags8 {
     pub fn full() -> Self {
         Self(u8::MAX)
     }
+    /// Returns a new instance with the first `n` (1-8) bits set. 
+    ///
+    /// __Panics__ if `n < 1` or `n > 8`.
+    #[inline]
+    pub fn with_first_n_set(n: u8) -> Self {
+        assert!(n > 0 && n < 9, "Value must be from 1 to 8");
+        
+        let v = 1 << n - 1;       
+        
+        BitFlags8(v | (v-1))
+    }    
     /// Returns a new instance from a `u8`.
     #[inline]
     pub fn from_u8(val: u8) -> Self {
