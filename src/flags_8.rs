@@ -21,17 +21,19 @@ impl BitFlags8 {
     pub fn full() -> Self {
         Self(u8::MAX)
     }
-    /// Returns a new instance with the first `n` (1-8) bits set. 
+    /// Returns a new instance with bits in range `(start..=end)` set.
     ///
-    /// __Panics__ if `n < 1` or `n > 8`.
+    /// __Panics__ if `start > 7`, `end > 7`, or `start > end`.
     #[inline]
-    pub fn with_first_n_set(n: u8) -> Self {
-        assert!(n > 0 && n < 9, "Value must be from 1 to 8");
-        
-        let v = 1 << n - 1;       
-        
-        BitFlags8(v | (v-1))
-    }    
+    pub fn with_set_bit_range(start: u8, end: u8) -> Self {
+        assert!(
+            start < 8 && end < 8 && start <= end,
+            "BitFlags8 are indexed from 0 to 7, and start must be <= end"
+        );
+
+        let e = 1 << end;
+        BitFlags8(e | e - (1 << start))
+    }
     /// Returns a new instance from a `u8`.
     #[inline]
     pub fn from_u8(val: u8) -> Self {
@@ -116,7 +118,7 @@ impl BitFlags8 {
     /// __Panics__ if `index > 7`.
     #[inline]
     pub fn insert_at_index(&mut self, index: usize) {
-        assert!(index < 8, "BitFlags8 structs are indexed from 0 to 7");
+        assert!(index < 8, "BitFlags8 are indexed from 0 to 7");
         self.0 = self.0 | 2_u8.pow(index as u32);
     }
     /// Inserts `other` if `value` is `true`; removes `other` if `value` is `false`.
@@ -133,12 +135,25 @@ impl BitFlags8 {
     /// __Panics__ if `index > 7`.
     #[inline]
     pub fn set_at_index(&mut self, index: usize, value: bool) {
-        assert!(index < 8, "BitFlags8 structs are indexed from 0 to 7");
+        assert!(index < 8, "BitFlags8 are indexed from 0 to 7");
         if value {
             self.insert_at_index(index);
         } else {
             self.remove_at_index(index);
         }
+    }
+    /// Sets bits in range `(start..=end)`.
+    ///
+    /// __Panics__ if `start > 7`, `end > 7`, or `start > end`.
+    #[inline]
+    pub fn set_bit_range(&mut self, start: u8, end: u8) {
+        assert!(
+            start < 8 && end < 8 && start <= end,
+            "BitFlags8 are indexed from 0 to 7, and start must be <= end"
+        );
+
+        let e = 1 << end;
+        self.0 |= e | e - (1 << start);
     }
     /// Toggles bits based on mask (using bitwise `XOR`).
     #[inline]
@@ -150,7 +165,7 @@ impl BitFlags8 {
     /// __Panics__ if `index > 7`.
     #[inline]
     pub fn toggle_at_index(&mut self, index: usize) {
-        assert!(index < 8, "BitFlags8 structs are indexed from 0 to 7");
+        assert!(index < 8, "BitFlags8 are indexed from 0 to 7");
         self.0 = self.0 ^ 2_u8.pow(index as u32);
     }
     /// Unsets bits that match those of incoming `BitFlags8` (bitwise `AND NOT`).
@@ -163,7 +178,7 @@ impl BitFlags8 {
     /// __Panics__ if `index > 7`.
     #[inline]
     pub fn remove_at_index(&mut self, index: usize) {
-        assert!(index < 8, "BitFlags8 structs are indexed from 0 to 7");
+        assert!(index < 8, "BitFlags8 are indexed from 0 to 7");
         self.0 = self.0 & !2_u8.pow(index as u32);
     }
     /// Returns the number of bits.
@@ -176,7 +191,7 @@ impl BitFlags8 {
     /// __Panics__ if `index > 7`.
     #[inline]
     pub fn bit_at_index(&self, index: usize) -> bool {
-        assert!(index < 8, "BitFlags8 structs are indexed from 0 to 7");
+        assert!(index < 8, "BitFlags8 are indexed from 0 to 7");
         self.0 & 2_u8.pow(index as u32) > 0
     }
     /// Returns value of bit at given index (`0` is `false`; `1` is `true`). Returns `None` if out
@@ -222,7 +237,7 @@ impl BitFlags8 {
     /// Iterates over set bits of the structure. Returns `Some(bit_index)` if the
     /// bit is set, otherwise `None`.
     ///
-    /// E.g. collecting `0b00001001` into a vector would produce `vec![0, 3]`, 
+    /// E.g. collecting `0b00001001` into a vector would produce `vec![0, 3]`,
     /// representing the 0th and 3rd indexes.
     #[inline]
     pub fn iter(&self) -> BitFlagsIter8 {
@@ -243,7 +258,7 @@ impl TryFrom<u32> for BitFlags8 {
         if value < 8 {
             Ok(Self(2_u8.pow(value)))
         } else {
-            Err("BitFlags8 structs are indexed from 0 to 7")
+            Err("BitFlags8 are indexed from 0 to 7")
         }
     }
 }
@@ -255,7 +270,7 @@ impl TryFrom<usize> for BitFlags8 {
         if value < 8 {
             Ok(Self(2_u8.pow(value as u32)))
         } else {
-            Err("BitFlags8 structs are indexed from 0 to 7")
+            Err("BitFlags8 are indexed from 0 to 7")
         }
     }
 }

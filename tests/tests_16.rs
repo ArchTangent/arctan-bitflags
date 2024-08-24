@@ -388,6 +388,37 @@ fn bitflags16_set_at_index() {
 }
 
 #[test]
+fn bitflags16_set_bit_range() {
+    let mut actual = [
+        BitFlags16::new(),
+        BitFlags16::new(),
+        BitFlags16::new(),
+        BitFlags16::new(),
+        BitFlags16::new(),
+        BitFlags16::new(),
+    ];
+    
+    actual[0].set_bit_range(0, 0);
+    actual[1].set_bit_range(0, 1);
+    actual[2].set_bit_range(0, 2);
+    actual[3].set_bit_range(1, 3);
+    actual[4].set_bit_range(6, 7);
+    actual[5].set_bit_range(0, 15);
+
+    let expected = [
+        BitFlags16(0b0000_0001),
+        BitFlags16(0b0000_0011),
+        BitFlags16(0b0000_0111),
+        BitFlags16(0b0000_1110),
+        BitFlags16(0b1100_0000),
+        BitFlags16::full(),
+    ];
+
+    assert_eq!(actual, expected);
+}
+
+
+#[test]
 fn bitflags16_toggle() {
     let mut f1 = BitFlags16(0b0101);
     f1.toggle(BitFlags16(0b0000));
@@ -436,27 +467,22 @@ fn bitflags16_toggle_at_index() {
 }
 
 #[test]
-fn bitflags16_with_first_n_set() {
-    let suite: [u8; 5] = [
-        1,
-        2,
-        4,    
-        7,
-        16,
+fn bitflags16_with_set_bit_range() {
+    let actual = [
+        BitFlags16::with_set_bit_range(0, 0),
+        BitFlags16::with_set_bit_range(0, 1),
+        BitFlags16::with_set_bit_range(0, 2),
+        BitFlags16::with_set_bit_range(1, 3),
+        BitFlags16::with_set_bit_range(6, 7),
+        BitFlags16::with_set_bit_range(0, 15),
     ];
     let expected = [
         BitFlags16(0b0000_0001),
         BitFlags16(0b0000_0011),
-        BitFlags16(0b0000_1111),
-        BitFlags16(0b0111_1111),
+        BitFlags16(0b0000_0111),
+        BitFlags16(0b0000_1110),
+        BitFlags16(0b1100_0000),
         BitFlags16::full(),
-    ];
-    let actual = [
-        BitFlags16::with_first_n_set(suite[0]),
-        BitFlags16::with_first_n_set(suite[1]),
-        BitFlags16::with_first_n_set(suite[2]),
-        BitFlags16::with_first_n_set(suite[3]),
-        BitFlags16::with_first_n_set(suite[4]),
     ];
 
     assert_eq!(actual, expected);

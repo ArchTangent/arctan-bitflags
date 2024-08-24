@@ -21,17 +21,19 @@ impl BitFlags64 {
     pub fn full() -> Self {
         Self(u64::MAX)
     }
-    /// Returns a new instance with the first `n` (1-64) bits set. 
+    /// Returns a new instance with bits in range `(start..=end)` set.
     ///
-    /// __Panics__ if `n < 1` or `n > 64`.
+    /// __Panics__ if `start > 63`, `end > 63`, or `start > end`.
     #[inline]
-    pub fn with_first_n_set(n: u8) -> Self {
-        assert!(n > 0 && n < 65, "Value must be from 1 to 64");
-        
-        let v = 1 << n - 1;       
-        
-        BitFlags64(v | (v-1))
-    }     
+    pub fn with_set_bit_range(start: u8, end: u8) -> Self {
+        assert!(
+            start < 64 && end < 64 && start <= end,
+            "BitFlags8 are indexed from 0 to 63, and start must be <= end"
+        );
+
+        let e = 1 << end;
+        BitFlags64(e | e - (1 << start))
+    }  
     /// Returns a new instance from a `u64`.
     #[inline]
     pub fn from_u64(val: u64) -> Self {
@@ -116,7 +118,7 @@ impl BitFlags64 {
     /// __Panics__ if `index > 63`.
     #[inline]
     pub fn insert_at_index(&mut self, index: usize) {
-        assert!(index < 64, "BitFlags64 structs are indexed from 0 to 63");
+        assert!(index < 64, "BitFlags64 are indexed from 0 to 63");
         self.0 = self.0 | 2_u64.pow(index as u32);
     }
     /// Inserts `other` if `value` is `true`; removes `other` if `value` is `false`.
@@ -133,13 +135,26 @@ impl BitFlags64 {
     /// __Panics__ if `index > 63`.
     #[inline]
     pub fn set_at_index(&mut self, index: usize, value: bool) {
-        assert!(index < 64, "BitFlags64 structs are indexed from 0 to 63");
+        assert!(index < 64, "BitFlags64 are indexed from 0 to 63");
         if value {
             self.insert_at_index(index);
         } else {
             self.remove_at_index(index);
         }
     }
+    /// Sets bits in range `(start..=end)`.
+    ///
+    /// __Panics__ if `start > 63`, `end > 63`, or `start > end`.
+    #[inline]
+    pub fn set_bit_range(&mut self, start: u8, end: u8) {
+        assert!(
+            start < 64 && end < 64 && start <= end,
+            "BitFlags64 are indexed from 0 to 63, and start must be <= end"
+        );
+
+        let e = 1 << end;
+        self.0 |= e | e - (1 << start);
+    }    
     /// Toggles bits based on mask (using bitwise `XOR`).
     #[inline]
     pub fn toggle(&mut self, mask: Self) {
@@ -150,7 +165,7 @@ impl BitFlags64 {
     /// __Panics__ if `index > 63`.
     #[inline]
     pub fn toggle_at_index(&mut self, index: usize) {
-        assert!(index < 64, "BitFlags64 structs are indexed from 0 to 63");
+        assert!(index < 64, "BitFlags64 are indexed from 0 to 63");
         self.0 = self.0 ^ 2_u64.pow(index as u32);
     }
     /// Unsets bits that match those of incoming `BitFlags64` (bitwise `AND NOT`).
@@ -163,7 +178,7 @@ impl BitFlags64 {
     /// __Panics__ if `index > 63`.
     #[inline]
     pub fn remove_at_index(&mut self, index: usize) {
-        assert!(index < 64, "BitFlags64 structs are indexed from 0 to 63");
+        assert!(index < 64, "BitFlags64 are indexed from 0 to 63");
         self.0 = self.0 & !2_u64.pow(index as u32);
     }
     /// Returns the number of bits.
@@ -176,7 +191,7 @@ impl BitFlags64 {
     /// __Panics__ if `index > 63`.
     #[inline]
     pub fn bit_at_index(&self, index: usize) -> bool {
-        assert!(index < 64, "BitFlags64 structs are indexed from 0 to 63");
+        assert!(index < 64, "BitFlags64 are indexed from 0 to 63");
         self.0 & 2_u64.pow(index as u32) > 0
     }
     /// Returns value of bit at given index (`0` is `false`; `1` is `true`). Returns `None` if out
@@ -246,7 +261,7 @@ impl TryFrom<u32> for BitFlags64 {
         if value < 64 {
             Ok(Self(2_u64.pow(value)))
         } else {
-            Err("BitFlags64 structs are indexed from 0 to 63")
+            Err("BitFlags64 are indexed from 0 to 63")
         }
     }
 }
@@ -258,7 +273,7 @@ impl TryFrom<usize> for BitFlags64 {
         if value < 64 {
             Ok(Self(2_u64.pow(value as u32)))
         } else {
-            Err("BitFlags64 structs are indexed from 0 to 63")
+            Err("BitFlags64 are indexed from 0 to 63")
         }
     }
 }

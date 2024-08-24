@@ -21,17 +21,19 @@ impl BitFlags32 {
     pub fn full() -> Self {
         Self(u32::MAX)
     }
-    /// Returns a new instance with the first `n` (1-32) bits set. 
+    /// Returns a new instance with bits in range `(start..=end)` set.
     ///
-    /// __Panics__ if `n < 1` or `n > 32`.
+    /// __Panics__ if `start > 31`, `end > 31`, or `start > end`.
     #[inline]
-    pub fn with_first_n_set(n: u8) -> Self {
-        assert!(n > 0 && n < 33, "Value must be from 1 to 32");
-        
-        let v = 1 << n - 1;       
-        
-        BitFlags32(v | (v-1))
-    }     
+    pub fn with_set_bit_range(start: u8, end: u8) -> Self {
+        assert!(
+            start < 32 && end < 32 && start <= end,
+            "BitFlags8 are indexed from 0 to 31, and start must be <= end"
+        );
+
+        let e = 1 << end;
+        BitFlags32(e | e - (1 << start))
+    }    
     /// Returns a new instance from a `u32`.
     #[inline]
     pub fn from_u32(val: u32) -> Self {
@@ -116,7 +118,7 @@ impl BitFlags32 {
     /// __Panics__ if `index > 31`.
     #[inline]
     pub fn insert_at_index(&mut self, index: usize) {
-        assert!(index < 32, "BitFlags32 structs are indexed from 0 to 31");
+        assert!(index < 32, "BitFlags32 are indexed from 0 to 31");
         self.0 = self.0 | 2_u32.pow(index as u32);
     }
     /// Inserts `other` if `value` is `true`; removes `other` if `value` is `false`.
@@ -133,12 +135,25 @@ impl BitFlags32 {
     /// __Panics__ if `index > 31`.
     #[inline]
     pub fn set_at_index(&mut self, index: usize, value: bool) {
-        assert!(index < 32, "BitFlags32 structs are indexed from 0 to 31");
+        assert!(index < 32, "BitFlags32 are indexed from 0 to 31");
         if value {
             self.insert_at_index(index);
         } else {
             self.remove_at_index(index);
         }
+    }
+    /// Sets bits in range `(start..=end)`.
+    ///
+    /// __Panics__ if `start > 31`, `end > 31`, or `start > end`.
+    #[inline]
+    pub fn set_bit_range(&mut self, start: u8, end: u8) {
+        assert!(
+            start < 32 && end < 32 && start <= end,
+            "BitFlags32 are indexed from 0 to 31, and start must be <= end"
+        );
+
+        let e = 1 << end;
+        self.0 |= e | e - (1 << start);
     }
     /// Toggles bits based on mask (using bitwise `XOR`).
     #[inline]
@@ -150,7 +165,7 @@ impl BitFlags32 {
     /// __Panics__ if `index > 31`.
     #[inline]
     pub fn toggle_at_index(&mut self, index: usize) {
-        assert!(index < 32, "BitFlags32 structs are indexed from 0 to 31");
+        assert!(index < 32, "BitFlags32 are indexed from 0 to 31");
         self.0 = self.0 ^ 2_u32.pow(index as u32);
     }
     /// Unsets flags that match those of incoming `BitFlags32` (bitwise `AND NOT`).
@@ -163,7 +178,7 @@ impl BitFlags32 {
     /// __Panics__ if `index > 31`.
     #[inline]
     pub fn remove_at_index(&mut self, index: usize) {
-        assert!(index < 32, "BitFlags32 structs are indexed from 0 to 31");
+        assert!(index < 32, "BitFlags32 are indexed from 0 to 31");
         self.0 = self.0 & !2_u32.pow(index as u32);
     }
     /// Returns the number of bits.
@@ -176,7 +191,7 @@ impl BitFlags32 {
     /// __Panics__ if `index > 31`.
     #[inline]
     pub fn bit_at_index(&self, index: usize) -> bool {
-        assert!(index < 32, "BitFlags32 structs are indexed from 0 to 31");
+        assert!(index < 32, "BitFlags32 are indexed from 0 to 31");
         self.0 & 2_u32.pow(index as u32) > 0
     }
     /// Returns value of bit at given index (`0` is `false`; `1` is `true`). Returns `None` if out
@@ -245,7 +260,7 @@ impl TryFrom<usize> for BitFlags32 {
         if value < 32 {
             Ok(Self(2_u32.pow(value as u32)))
         } else {
-            Err("BitFlags32 structs are indexed from 0 to 31")
+            Err("BitFlags32 are indexed from 0 to 31")
         }
     }
 }

@@ -21,17 +21,19 @@ impl BitFlags16 {
     pub fn full() -> Self {
         Self(u16::MAX)
     }
-    /// Returns a new instance with the first `n` (1-16) bits set. 
+    /// Returns a new instance with bits in range `(start..=end)` set.
     ///
-    /// __Panics__ if `n < 1` or `n > 16`.
+    /// __Panics__ if `start > 15`, `end > 15`, or `start > end`.
     #[inline]
-    pub fn with_first_n_set(n: u8) -> Self {
-        assert!(n > 0 && n < 17, "Value must be from 1 to 16");
-        
-        let v = 1 << n - 1;       
-        
-        BitFlags16(v | (v-1))
-    } 
+    pub fn with_set_bit_range(start: u8, end: u8) -> Self {
+        assert!(
+            start < 16 && end < 16 && start <= end,
+            "BitFlags8 are indexed from 0 to 15, and start must be <= end"
+        );
+
+        let e = 1 << end;
+        BitFlags16(e | e - (1 << start))
+    }
     /// Returns a new instance from a `u16`.
     #[inline]
     pub fn from_u16(val: u16) -> Self {
@@ -115,7 +117,7 @@ impl BitFlags16 {
     /// __Panics__ if `index > 15`.
     #[inline]
     pub fn insert_at_index(&mut self, index: usize) {
-        assert!(index < 16, "BitFlags16 structs are indexed from 0 to 15");
+        assert!(index < 16, "BitFlags16 are indexed from 0 to 15");
         self.0 = self.0 | 2_u16.pow(index as u32);
     }
     /// Inserts `other` if `value` is `true`; removes `other` if `value` is `false`.
@@ -132,12 +134,25 @@ impl BitFlags16 {
     /// __Panics__ if `index > 15`.
     #[inline]
     pub fn set_at_index(&mut self, index: usize, value: bool) {
-        assert!(index < 16, "BitFlags16 structs are indexed from 0 to 15");
+        assert!(index < 16, "BitFlags16 are indexed from 0 to 15");
         if value {
             self.insert_at_index(index);
         } else {
             self.remove_at_index(index);
         }
+    }
+    /// Sets bits in range `(start..=end)`.
+    ///
+    /// __Panics__ if `start > 15`, `end > 15`, or `start > end`.
+    #[inline]
+    pub fn set_bit_range(&mut self, start: u8, end: u8) {
+        assert!(
+            start < 16 && end < 16 && start <= end,
+            "BitFlags16 are indexed from 0 to 15, and start must be <= end"
+        );
+
+        let e = 1 << end;
+        self.0 |= e | e - (1 << start);
     }
     /// Toggles bits based on mask (using bitwise `XOR`).
     #[inline]
@@ -149,7 +164,7 @@ impl BitFlags16 {
     /// __Panics__ if `index > 15`.
     #[inline]
     pub fn toggle_at_index(&mut self, index: usize) {
-        assert!(index < 16, "BitFlags16 structs are indexed from 0 to 15");
+        assert!(index < 16, "BitFlags16 are indexed from 0 to 15");
         self.0 = self.0 ^ 2_u16.pow(index as u32);
     }
     /// Unsets bits that match those of incoming `BitFlags16` (bitwise `AND NOT`).
@@ -162,7 +177,7 @@ impl BitFlags16 {
     /// __Panics__ if `index > 15`.
     #[inline]
     pub fn remove_at_index(&mut self, index: usize) {
-        assert!(index < 16, "BitFlags16 structs are indexed from 0 to 15");
+        assert!(index < 16, "BitFlags16 are indexed from 0 to 15");
         self.0 = self.0 & !2_u16.pow(index as u32);
     }
     /// Returns the number of bits.
@@ -175,7 +190,7 @@ impl BitFlags16 {
     /// __Panics__ if `index > 15`.
     #[inline]
     pub fn bit_at_index(&self, index: usize) -> bool {
-        assert!(index < 16, "BitFlags16 structs are indexed from 0 to 15");
+        assert!(index < 16, "BitFlags16 are indexed from 0 to 15");
         self.0 & 2_u16.pow(index as u32) > 0
     }
     /// Returns value of bit at given index (`0` is `false`; `1` is `true`). Returns `None` if out
@@ -243,7 +258,7 @@ impl TryFrom<u32> for BitFlags16 {
         if value < 16 {
             Ok(Self(2_u16.pow(value)))
         } else {
-            Err("BitFlags16 structs are indexed from 0 to 15")
+            Err("BitFlags16 are indexed from 0 to 15")
         }
     }
 }
@@ -255,7 +270,7 @@ impl TryFrom<usize> for BitFlags16 {
         if value < 16 {
             Ok(Self(2_u16.pow(value as u32)))
         } else {
-            Err("BitFlags16 structs are indexed from 0 to 15")
+            Err("BitFlags16 are indexed from 0 to 15")
         }
     }
 }
