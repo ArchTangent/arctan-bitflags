@@ -33,7 +33,7 @@ impl BitFlags64 {
 
         let e = 1 << end;
         BitFlags64(e | e - (1 << start))
-    }  
+    }
     /// Returns a new instance from a `u64`.
     #[inline]
     pub fn from_u64(val: u64) -> Self {
@@ -154,7 +154,7 @@ impl BitFlags64 {
 
         let e = 1 << end;
         self.0 |= e | e - (1 << start);
-    }    
+    }
     /// Toggles bits based on mask (using bitwise `XOR`).
     #[inline]
     pub fn toggle(&mut self, mask: Self) {
@@ -232,10 +232,51 @@ impl BitFlags64 {
 
         Some(bit_ix)
     }
-    /// Counts the number of ones in the bitflag.
+    /// Returns the number of ones in the bitflag.
     #[inline]
     pub fn count_ones(&self) -> u32 {
         self.0.count_ones()
+    }
+    /// Returns the number of zeroes in the bitflag.
+    #[inline]
+    pub fn count_zeros(&self) -> u32 {
+        self.0.count_zeros()
+    }
+    /// Returns the number of leading ones in the bitflag.
+    #[inline]
+    pub fn leading_ones(&self) -> u32 {
+        self.0.leading_ones()
+    }
+    /// Returns the number of leading zeroes in the bitflag.
+    #[inline]
+    pub fn leading_zeros(&self) -> u32 {
+        self.0.leading_zeros()
+    }
+    /// Returns the number of trailing ones in the bitflag.
+    #[inline]
+    pub fn trailing_ones(&self) -> u32 {
+        self.0.trailing_ones()
+    }
+    /// Returns the number of trailing zeroes in the bitflag.
+    #[inline]
+    pub fn trailing_zeros(&self) -> u32 {
+        self.0.trailing_zeros()
+    }
+    /// Shifts the bits to the left by a specified amount, `n`, wrapping the truncated
+    /// bits to the end of the resulting integer.
+    ///
+    /// _Note:_ this is not the same operation as the `<<` shifting operator!
+    #[inline]
+    pub fn rotate_left(&self, n: u32) -> Self {
+        Self(self.0.rotate_left(n))
+    }
+    /// Shifts the bits to the right by a specified amount, `n`, wrapping the truncated
+    /// bits to the beginning of the resulting integer.
+    ///
+    /// _Note:_ this is not the same operation as the `>>` shifting operator!
+    #[inline]
+    pub fn rotate_right(&self, n: u32) -> Self {
+        Self(self.0.rotate_right(n))
     }
     /// Iterates over set bits of the structure. Returns `Some(bit_index)` if the
     /// bit is set, otherwise `None`.
